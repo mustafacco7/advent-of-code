@@ -1,0 +1,14 @@
+{
+    "extends": "airbnb-base",
+    "plugins": [
+        "import",
+        "eslint-plugin-jest"
+    ],
+    "env": {
+        "jest/globals": true
+    },
+    "rules": {
+        "no-console": 0,
+        "max-len": [1, 120]
+    }
+}
