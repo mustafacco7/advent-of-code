@@ -1,6 +1,6 @@
 # Advent of Code
 
-http://adventofcode.com/
+https://adventofcode.com/
 
 My solutions to the Advent of Code
 
