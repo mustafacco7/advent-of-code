@@ -25,5 +25,4 @@ test('it should solve part 2 test cases', () => {
     'wvxyz',
   ];
   expect(findMatchingId(input)).toEqual('fgij');
-
 });
