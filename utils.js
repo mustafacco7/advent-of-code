@@ -70,5 +70,6 @@ const getData = async () => {
 };
 
 const getRows = () => getData().then(data => data.trim().split('\n'));
+const getRow = () => getRows().then(data => data[0]);
 
-module.exports = { getData, getRows };
+module.exports = { getRow, getRows };
