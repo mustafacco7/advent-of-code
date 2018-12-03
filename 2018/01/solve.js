@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const { getRows } = require('../../utils');
 const { sum, findDuplicates } = require('./sum');
 
