@@ -6,8 +6,7 @@ const { sum, findDuplicates } = require('./sum');
 const solve1 = () => {
   getRows()
     .then((rows) => {
-      const result = sum(rows);
-      console.log(`Part 1: ${result}`);
+      console.log(`Part 1: ${sum(rows)}`);
     })
     .catch(err => console.log(`There was an error\n${err}`));
 };
@@ -15,8 +14,7 @@ const solve1 = () => {
 const solve2 = () => {
   getRows()
     .then((rows) => {
-      const result = findDuplicates(rows);
-      console.log(`Part 2: ${result}`);
+      console.log(`Part 2: ${findDuplicates(rows)}`);
     });
 };
 

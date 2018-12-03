@@ -1,16 +1,8 @@
 
-const getNumber = (value) => {
-  if (!value) {
-    console.log('empty');
-    return 0;
-  }
-  return parseInt(value, 10);
-};
-
-const sum = data => data.reduce((datum, value) => {
+const sum = data => data.reduce((acc, datum) => {
   /* eslint-disable-next-line no-param-reassign */
-  datum += getNumber(value);
-  return datum;
+  acc += parseInt(datum, 10);
+  return acc;
 }, 0);
 
 
@@ -21,10 +13,8 @@ const findDuplicates = (data) => {
   while (!found) {
     /* eslint-disable-next-line no-loop-func */
     data.some((value) => {
-      result += getNumber(value);
-      if (frequencies[result]) {
-        found = true;
-      }
+      result += parseInt(value, 10);
+      found = !!frequencies[result];
       frequencies[result] = true;
       return found;
     });
