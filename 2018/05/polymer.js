@@ -17,4 +17,19 @@ const react = (data) => {
   return result.length;
 };
 
-module.exports = { react };
+const remove = (data) => {
+  let minLength = Number.MAX_VALUE;
+
+  Array(26)
+    .fill(1)
+    .map((_, index) => String.fromCharCode(index + 65))
+    .forEach((character) => {
+      const input = data.split('').filter(datum => datum.toUpperCase() !== character).join('');
+      const length = react(input);
+      minLength = Math.min(length, minLength);
+    });
+
+  return minLength;
+};
+
+module.exports = { react, remove };

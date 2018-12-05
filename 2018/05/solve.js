@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { react } = require('./polymer');
+const { react, remove } = require('./polymer');
 const { getRow } = require('../../utils');
 
 const solve1 = () => {
@@ -8,4 +8,10 @@ const solve1 = () => {
     .then(data => console.log(react(data)));
 };
 
+const solve2 = () => {
+  getRow()
+    .then(data => console.log(remove(data)));
+};
+
 solve1();
+solve2();

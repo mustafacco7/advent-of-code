@@ -1,4 +1,4 @@
-const { react } = require('./polymer');
+const { react, remove } = require('./polymer');
 
 describe('it should solve part 1 and part 2', () => {
   test('it should solve example 1', () => {
@@ -7,5 +7,9 @@ describe('it should solve part 1 and part 2', () => {
     expect(react('abAB')).toEqual(4);
     expect(react('aabAAB')).toEqual(6);
     expect(react('dabAcCaCBAcCcaDA')).toEqual(10);
+  });
+
+  test('it should solve example 2', () => {
+    expect(remove('dabAcCaCBAcCcaDA')).toEqual(4);
   });
 });
