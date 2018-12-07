@@ -12,6 +12,6 @@ describe('it should solve part 1 and part 2', () => {
   });
 
   test('it should solve part 2 test cases', () => {
-    expect(findOverlaps(input)[1]).toEqual('3');
+    expect(findOverlaps(input)[1][0]).toEqual('3');
   });
 });

@@ -10,7 +10,7 @@ const solve1 = () => {
 
 const solve2 = () => {
   getRows()
-    .then(data => console.log(findOverlaps(data)[1]));
+    .then(data => console.log(findOverlaps(data)[1][0]));
 };
 
 solve1();

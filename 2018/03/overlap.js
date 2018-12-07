@@ -20,7 +20,7 @@ const findOverlaps = (data) => {
         }
       }
     });
-  const [intact] = Object.entries(touched).filter(([, value]) => !value).flat();
+  const [intact] = Object.entries(touched).filter(([, value]) => !value);
 
   return [Object.values(grid).filter(entry => entry === 'X').length, intact];
 };
