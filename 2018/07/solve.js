@@ -8,10 +8,10 @@ const solve1 = () => {
     .then(data => console.log(findOrder(data)));
 };
 
-/*const solve2 = () => {
+/* const solve2 = () => {
   getRows()
     .then(data => console.log((data)));
-};*/
+}; */
 
 solve1();
 // solve2();
