@@ -17,9 +17,9 @@ const findCorners = coordinatesList => coordinatesList.reduce((corners, [x, y]) 
 /* eslint-enable no-param-reassign */
 
 
-const minDistances = {};
 
 const findLargestArea = (rows) => {
+  const minDistances = {};
   const coordinates = getCoordinates(rows);
   const corners = findCorners(coordinates);
   const { x1, y1, x2, y2 } = corners;
@@ -46,4 +46,24 @@ const findLargestArea = (rows) => {
   return max(Object.values(useful));
 };
 
-module.exports = { findLargestArea };
+const findClosestArea = (rows, maxSize) => {
+  const distances = {};
+  const coordinates = getCoordinates(rows);
+  const corners = findCorners(coordinates);
+  const { x1, y1, x2, y2 } = corners;
+  range(x1, x2).forEach((x) => {
+    range(y1, y2).forEach((y) => {
+      const dist = coordinates.reduce((sum, point) => {
+        /* eslint-disable-next-line no-param-reassign */
+        sum += distance(point, [x, y]);
+        return sum;
+      }, 0);
+      if (dist < maxSize) {
+        distances[`${x},${y}`] = dist;
+      }
+    });
+  });
+  return Object.entries(distances).length;
+};
+
+module.exports = { findLargestArea, findClosestArea };

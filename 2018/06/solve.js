@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { findLargestArea } = require('./manhattan');
+const { findLargestArea, findClosestArea } = require('./manhattan');
 const { getRows } = require('../../utils');
 
 const solve1 = () => {
@@ -10,8 +10,8 @@ const solve1 = () => {
 
 const solve2 = () => {
   getRows()
-    .then(data => console.log((data)));
+    .then(data => console.log(findClosestArea(data, 10000)));
 };
 
 solve1();
-// solve2();
+solve2();

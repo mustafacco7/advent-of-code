@@ -1,4 +1,4 @@
-const { findLargestArea } = require('./manhattan');
+const { findLargestArea, findClosestArea } = require('./manhattan');
 
 describe('it should solve part 1 and part 2', () => {
 
@@ -16,5 +16,6 @@ describe('it should solve part 1 and part 2', () => {
   });
 
   test('it should solve example 2', () => {
+    expect(findClosestArea(input1, 32)).toEqual(16);
   });
 });
