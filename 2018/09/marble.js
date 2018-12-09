@@ -1,34 +1,48 @@
-const getHighScore = (players, lastPoint) => {
-  let currentIndex = 0;
-  const circle = [0];
-  let currentPoint = 0;
-  const score = Array(players).fill(0);
+let score;
+let current = { value: 0 };
+current.prev = current;
+current.next = current;
 
-  const putMarble = (player) => {
-    currentPoint += 1;
-    let nextIndex = (currentIndex + 2) % (circle.length + 1);
-    nextIndex = Math.max(1, nextIndex);
+/* eslint-disable no-param-reassign */
+/* eslint-disable-next-line object-curly-newline */
+const putMarble = ({ player, currentPoint }) => {
+  let target;
 
-    if (currentPoint % 23) {
-      circle.splice(nextIndex, 0, currentPoint);
-    } else {
-      nextIndex = (currentIndex - 7) % circle.length;
-      if (nextIndex < 0) {
-        nextIndex = circle.length + nextIndex;
-      }
-      const point = currentPoint + parseInt(circle.splice(nextIndex, 1), 10);
-      score[player] += point;
+  if (currentPoint % 23) {
+    target = current.next;
+    const toAdd = { value: currentPoint, prev: target, next: target.next };
+    target.next.prev = toAdd;
+    target.next = toAdd;
+    current = toAdd;
+  } else {
+    target = current;
+    for (let i = 0; i < 7; i += 1) {
+      target = target.prev;
     }
-    currentIndex = nextIndex;
-  };
-
-  let player = 0;
-  while (currentPoint <= lastPoint) {
-    player = (player + 1) % players;
-    putMarble(player);
+    const points = currentPoint + target.value;
+    score[player] += points;
+    target.next.prev = target.prev;
+    target.prev.next = target.next;
+    current = target.next;
   }
 
-  return Math.max.apply(null, Object.values(score));
+  return { current, score };
+};
+/* eslint-enable no-param-reassign */
+
+const getHighScore = (players, lastPoint) => {
+  let currentPoint = 0;
+  let player = -1;
+  score = Array(players).fill(0);
+
+  while (currentPoint < lastPoint) {
+    currentPoint += 1;
+    player = (player + 1) % players;
+    /* eslint-disable-next-line object-curly-newline */
+    putMarble({ player, currentPoint });
+  }
+
+  return Math.max.apply(null, score);
 };
 
 const getInputValues = input => input.match(/(\d+) .* (\d+) points/).map(v => parseInt(v, 10));
