@@ -17,7 +17,6 @@ const findCorners = coordinatesList => coordinatesList.reduce((corners, [x, y]) 
 /* eslint-enable no-param-reassign */
 
 
-
 const findLargestArea = (rows) => {
   const minDistances = {};
   const coordinates = getCoordinates(rows);
