@@ -12,13 +12,13 @@ const findMaxSquare = (gridSerial, minSquareSize = 3, maxSquareSize = 3) => {
   for (let y = 0; y <= gridSize; y += 1) {
     powerLevels.push([]);
   }
-  const maxPoint = { value: 0, point: [] }
+  const maxPoint = { value: 0, point: [] };
 
   for (let y = gridSize; y > 0; y -= 1) {
     for (let x = gridSize; x > 0; x -= 1) {
+      powerLevels[y][x] = calculatePowerLevel([x, y], gridSerial);
       for (let squareSize = minSquareSize; squareSize <= maxSquareSize; squareSize += 1) {
-        powerLevels[y][x] = calculatePowerLevel([x, y], gridSerial);
-        if (x <= gridSize - squareSize - 1 && y <= gridSize - squareSize - 1) {
+        if (x <= gridSize - squareSize && y <= gridSize - squareSize) {
           let sum = 0;
           for (let i = 0; i < squareSize; i += 1) {
             for (let j = 0; j < squareSize; j += 1) {
@@ -27,7 +27,7 @@ const findMaxSquare = (gridSerial, minSquareSize = 3, maxSquareSize = 3) => {
           }
           if (sum > maxPoint.value) {
             maxPoint.value = sum;
-            maxPoint.point = `${x},${y}`;
+            maxPoint.point = `${x},${y},${squareSize}`;
           }
         }
       }
@@ -38,11 +38,7 @@ const findMaxSquare = (gridSerial, minSquareSize = 3, maxSquareSize = 3) => {
 
 };
 
-const findReallyMaxSquare = (gridSerial) => {
-  const reallyMaxPoint = findMaxSquare(gridSerial, 1, 300);
-
-  return reallyMaxPoint;
-};
+const findReallyMaxSquare = gridSerial => findMaxSquare(gridSerial, 1, 300);
 
 
 module.exports = { calculatePowerLevel, findMaxSquare, findReallyMaxSquare };

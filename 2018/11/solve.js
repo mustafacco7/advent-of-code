@@ -7,7 +7,7 @@ const solve1 = () => {
 };
 
 const solve2 = () => {
-  //console.log(findReallyMaxSquare(input));
+  // console.log(findReallyMaxSquare(input));
 };
 
 solve1();
