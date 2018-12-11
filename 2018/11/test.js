@@ -26,12 +26,12 @@ describe('it should solve day 11', () => {
   describe('it should solve part 2', () => {
 
     test('it should find maxSquare', () => {
-      // expect(findReallyMaxSquare(18).point).toEqual('90,269,16');
-      // expect(findReallyMaxSquare(42).point).toEqual('232,251,12');
+      expect(findReallyMaxSquare(18).point).toEqual('90,269,16');
+      expect(findReallyMaxSquare(42).point).toEqual('232,251,12');
     });
 
     test('it should solve example 2', () => {
-      // expect(findReallyMaxSquare(input).point).toEqual('');
+      expect(findReallyMaxSquare(input).point).toEqual('231,107,14');
     });
   });
 });
