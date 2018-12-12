@@ -34,14 +34,6 @@ const findPots = (input, steps) => {
     potsStates[step] = pots;
   }
 
-  potsStates.forEach((row, index) => {
-    const string = row.reduce((acc, pot) => {
-      acc += pot;
-      return acc;
-    }, '');
-    console.log(`${index}: ${string}`);
-  });
-
   return potsStates[steps].reduce((sum, pot, index) => {
     if (pot === '#') {
       sum += index - 4;
