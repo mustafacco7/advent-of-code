@@ -4,7 +4,7 @@ const max = arr => Math.max.apply(null, arr);
 const range = (low, high) => Array(high - low + 1).fill(1).map((_, v) => v + low);
 const getCoordinates = rows => rows.map(row => row.split(',').map(v => parseInt(v, 10)));
 
-/* eslint-disable no-param-reassign, object-curly-newline */
+/* eslint-disable object-curly-newline */
 const findCorners = coordinatesList => coordinatesList.reduce((corners, [x, y]) => {
   const { x1, y1, x2, y2 } = corners;
   return {
@@ -14,7 +14,6 @@ const findCorners = coordinatesList => coordinatesList.reduce((corners, [x, y]) 
     y2: Math.max(y, y2),
   };
 }, { x1: Number.MAX_VALUE, y1: Number.MAX_VALUE, x2: -1, y2: -1 });
-/* eslint-enable no-param-reassign */
 
 
 const findLargestArea = (rows) => {
@@ -53,7 +52,6 @@ const findClosestArea = (rows, maxSize) => {
   range(x1, x2).forEach((x) => {
     range(y1, y2).forEach((y) => {
       const dist = coordinates.reduce((sum, point) => {
-        /* eslint-disable-next-line no-param-reassign */
         sum += distance(point, [x, y]);
         return sum;
       }, 0);

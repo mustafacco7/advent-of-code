@@ -13,7 +13,6 @@ const getChecksum = () => {
   }
 
   checkSum += list.splice(0, entries).reduce((sum, v) => {
-    /* eslint-disable-next-line no-param-reassign */
     sum += v;
     return sum;
   }, 0);

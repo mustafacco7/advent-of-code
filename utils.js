@@ -37,7 +37,6 @@ const guessDate = () => {
 };
 
 
-/* eslint-disable no-param-reassign */
 const getRemoteData = ({ year, day } = {}) => {
   if (!year && !day) {
     [year, day] = guessDate();

@@ -1,6 +1,5 @@
 
 const sum = data => data.reduce((acc, datum) => {
-  /* eslint-disable-next-line no-param-reassign */
   acc += parseInt(datum, 10);
   return acc;
 }, 0);

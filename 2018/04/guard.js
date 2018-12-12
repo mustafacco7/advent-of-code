@@ -1,4 +1,4 @@
-/* eslint-disable no-param-reassign, no-shadow */
+/* eslint-disable no-shadow */
 const findMaxMinute = minutes => Object.entries(minutes).reduce((max, [minute, count]) => {
   if (count > max.count) {
     max.count = count;
