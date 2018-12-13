@@ -1,19 +1,31 @@
-const getMove = (direction) => {
+/* eslint-disable object-curly-newline */
+const getDirection = (direction) => {
   const dirMap = {
     '>': [1, 0],
     '<': [-1, 0],
     '^': [0, -1],
     v: [0, 1],
   };
-
   return dirMap[direction];
 };
 
-const getNextIntersection = (nextIntersection) => {
-  return ((nextIntersection + 1) % 3);
-};
 
-const move = ({ x, y, direction, nextIntersection }, grid) => {
+const getCarts = grid => grid.reduce((carts, row, y) => {
+  row.split('').forEach((cell, x) => {
+    const [, cart] = (cell.match(/([<>^v])/) || []);
+    if (cart) {
+      const direction = getDirection(cart);
+      carts.push({ x, y, nextTurn: 0, direction });
+    }
+  });
+  return carts;
+}, []);
+
+
+const getNextTurn = nextTurn => ((nextTurn + 1) % 3);
+const sortCarts = carts => carts.sort((cart1, cart2) => cart1.y - cart2.y || cart1.x - cart2.x);
+
+const move = ({ x, y, direction, nextTurn }, grid) => {
   x += direction[0];
   y += direction[1];
   const cell = grid[y][x];
@@ -22,92 +34,62 @@ const move = ({ x, y, direction, nextIntersection }, grid) => {
     return { x, y };
   }
 
-  let [xx, yy] = direction;
-
-  if (cell === '\\') {
-    if (xx) {
-      yy = xx;
-      xx = 0;
-    } else if (yy) {
-      xx = yy;
-      yy = 0;
-    }
-  }
-
-  if (cell === '/') {
-    if (xx) {
-      yy = -xx;
-      xx = 0;
-    } else if (yy) {
-      xx = -yy;
-      yy = 0;
-    }
-  }
-
+  let [dx, dy] = direction;
 
   if (cell === '+') {
-    const factor = nextIntersection - 1;
-    if (factor) {
-      if (xx === 0) {
-        xx = -1 * yy * factor;
-        yy = 0;
-      } else {
-        yy = xx * factor;
-        xx = 0;
+    const factor = nextTurn - 1;
+    if (factor !== 0) {
+      if (dx === 0) {
+        dx = -1 * dy * factor;
+        dy = 0;
+      } else if (dy === 0) {
+        dy = dx * factor;
+        dx = 0;
       }
     }
-    nextIntersection = getNextIntersection(nextIntersection);
+    nextTurn = getNextTurn(nextTurn);
+
+  } else {
+
+    const factor = cell === '/' ? -1 : 1;
+    if (dx === 0) {
+      dx = factor * dy;
+      dy = 0;
+    } else {
+      dy = factor * dx;
+      dx = 0;
+    }
   }
-  direction = [xx, yy];
 
+  direction = [dx, dy];
 
-  return { x, y, direction, nextIntersection };
+  return { x, y, direction, nextTurn };
 };
 
-const findCrash = (grid) => {
-  const carts = [];
-  grid.forEach((row, y) => {
-    row.split('').forEach((cell, x) => {
-      const [, cart] = (cell.match(/([<>^v])/) || []);
-      if (cart) {
-        const direction = getMove(cart);
-        carts.push({
-          x,
-          y,
-          nextIntersection: 0,
-          direction,
-        });
-      }
-    });
+const detectCollision = (carts) => {
+  const occupied = {};
+  let collisionCoordinate = '';
+  carts.some(({ x, y }) => {
+    if (occupied[`${x},${y}`]) {
+      collisionCoordinate = `${x},${y}`;
+      return true;
+    }
+    occupied[`${x},${y}`] = true;
+    return false;
   });
-
-  let collision = false;
-  let collissionCoordinate = '';
-  while (!collision) {
-    carts.sort((cart1, cart2) => {
-      const x1 = cart1.x;
-      const y1 = cart1.y;
-      const x2 = cart2.x;
-      const y2 = cart2.y;
-      return y1 - y2 || x1 - x2;
-    });
-    console.log(carts);
-    carts.forEach((cart, index) => {
-      cart = { ...cart, ...move(cart, grid) };
-      carts[index] = cart;
-    });
-    const occupied = {};
-    collision = carts.some(({ x, y }) => {
-      if (occupied[`${x}, ${y}`]) {
-        collissionCoordinate = `${x},${y}`;
-        return true;
-      }
-      occupied[`${x}, ${y}`] = true;
-      return false;
-    });
-  }
-  console.log('END: ', carts);
-  return collissionCoordinate;
+  return collisionCoordinate;
 };
 
-module.exports = { findCrash };
+const findCollisionLocation = (grid) => {
+  let carts = getCarts(grid);
+  let collisionCoordinate = '';
+  while (!collisionCoordinate) {
+    carts = sortCarts(carts);
+    carts = carts.map(cart => ({ ...cart, ...move(cart, grid) }));
+    collisionCoordinate = detectCollision(carts);
+  }
+
+  return collisionCoordinate;
+};
+
+module.exports = { findCollisionLocation };

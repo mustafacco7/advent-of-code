@@ -1,4 +1,4 @@
-const { findCrash } = require('./cart');
+const { findCollisionLocation } = require('./cart');
 
 const input = [
   '/->-\\        ',
@@ -13,7 +13,7 @@ describe('it should solve day 13', () => {
 
   describe('it should solve part 1', () => {
     it('should solve the test case', () => {
-      expect(findCrash(input)).toEqual('7,3');
+      expect(findCollisionLocation(input)).toEqual('7,3');
     });
   });
 

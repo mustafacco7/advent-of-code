@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 const { getRows } = require('../../utils');
-const { findCrash } = require('./cart');
+const { findCollisionLocation } = require('./cart');
 
 const solve1 = () => {
   getRows()
-    .then(data => console.log(findCrash(data)));
+    .then(data => console.log(findCollisionLocation(data)));
 };
 const solve2 = () => {
   getRows()
