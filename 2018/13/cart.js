@@ -9,7 +9,6 @@ const getDirection = (direction) => {
   return dirMap[direction];
 };
 
-
 const getCarts = grid => grid.reduce((carts, row, y) => {
   row.split('').forEach((cell, x) => {
     const [, cart] = (cell.match(/([<>^v])/) || []);
@@ -25,7 +24,8 @@ const getCarts = grid => grid.reduce((carts, row, y) => {
 const getNextTurn = nextTurn => ((nextTurn + 1) % 3);
 const sortCarts = carts => carts.sort((cart1, cart2) => cart1.y - cart2.y || cart1.x - cart2.x);
 
-const move = ({ x, y, direction, nextTurn }, grid) => {
+let grid;
+const move = ({ x, y, direction, nextTurn }) => {
   x += direction[0];
   y += direction[1];
   const cell = grid[y][x];
@@ -80,12 +80,13 @@ const detectCollision = (carts) => {
   return collisionCoordinate;
 };
 
-const findCollisionLocation = (grid) => {
+const findCollisionLocation = (input) => {
+  grid = input;
   let carts = getCarts(grid);
   let collisionCoordinate = '';
   while (!collisionCoordinate) {
     carts = sortCarts(carts);
-    carts = carts.map(cart => ({ ...cart, ...move(cart, grid) }));
+    carts = carts.map(cart => ({ ...cart, ...move(cart) }));
     collisionCoordinate = detectCollision(carts);
   }
 
