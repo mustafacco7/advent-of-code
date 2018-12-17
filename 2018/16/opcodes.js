@@ -30,20 +30,28 @@ const getRegistryAfter = (before) => {
 
 const getInstructions = instructions => instructions.split(' ').map(v => parseInt(v, 10));
 
+const applyOp = (op, reg, a, b, c) => {
+  const registry = [...reg];
+  registry[c] = op(registry, a, b);
+  return registry;
+};
+
+const isEqual = (a, b) => a.join(',') === b.join(',');
+
+
 const calculate = (input) => {
   let atLeastThree = 0;
   while (input.length) {
     const [before, inst, after] = input.splice(0, 4);
     if (!before.startsWith('Before:')) {
-      input = [];
+      break;
     } else {
       const registryBefore = getRegistryBefore(before);
       const [, a, b, c] = getInstructions(inst);
       const registryAfter = getRegistryAfter(after);
       const matches = Object.values(ops).filter((op) => {
-        const registry = [...registryBefore];
-        registry[c] = op(registry, a, b);
-        return registry.join(',') === registryAfter.join(',');
+        const registry = applyOp(op, registryBefore, a, b, c);
+        return isEqual(registry, registryAfter);
       }).length;
 
       if (matches > 2) {
@@ -56,4 +64,64 @@ const calculate = (input) => {
 };
 
 
-module.exports = { calculate };
+const getOperations = (input) => {
+  let opCandidates = Object.keys(ops).reduce((res, op) => {
+    res[op] = [];
+    return res;
+  }, {});
+
+  while (input.length) {
+    const [before, inst, after, rest] = input.splice(0, 4);
+    if (!before.startsWith('Before:')) {
+      input.unshift(rest, after);
+      break;
+    } else {
+      const registryBefore = getRegistryBefore(before);
+      const [instruction, a, b, c] = getInstructions(inst);
+      const registryAfter = getRegistryAfter(after);
+      Object.entries(ops).forEach(([name, op]) => {
+        const registry = applyOp(op, registryBefore, a, b, c);
+        if (isEqual(registry, registryAfter)) {
+          if (!opCandidates[name].includes(instruction)) {
+            opCandidates[name].push(instruction);
+          }
+        }
+      });
+    }
+  }
+
+  let foundInstructions = 0;
+  const opCodes = {};
+
+  while (foundInstructions < 16) {
+    Object.entries(opCandidates).forEach(([name, candidates]) => {
+      if (candidates.length === 1) {
+        const foundNum = candidates[0];
+        foundInstructions += 1;
+        opCodes[foundNum] = name;
+        opCandidates = Object.entries(opCandidates).reduce((res, [name, candidates]) => {
+          res[name] = candidates.filter(op => op !== foundNum);
+          return res;
+        }, {});
+      }
+    });
+  }
+
+  return { opCodes, instructions: input };
+};
+
+const calculatePart2 = (input) => {
+  const { opCodes, instructions } = getOperations(input);
+  const registers = [0, 0, 0, 0];
+
+  while (instructions.length) {
+    const line = instructions.shift();
+    const [op, a, b, c] = line.split(' ').map(v => parseInt(v, 10));
+    const opCode = opCodes[op];
+    registers[c] = ops[opCode](registers, a, b);
+  }
+  return registers[0];
+};
+
+
+module.exports = { calculate, calculatePart2 };

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-const { calculate } = require('./opcodes');
+const { calculate, calculatePart2 } = require('./opcodes');
 const { getRows } = require('../../utils');
 
 const solve1 = () => {
@@ -9,5 +9,13 @@ const solve1 = () => {
     });
 };
 
+const solve2 = () => {
+  getRows()
+    .then((data) => {
+      console.log(calculatePart2(data));
+    });
+};
+
 
 solve1();
+solve2();
