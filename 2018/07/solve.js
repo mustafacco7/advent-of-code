@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { findOrder } = require('./sleigh');
+const { findOrder, findTime } = require('./sleigh');
 const { getRows } = require('../../utils');
 
 const solve1 = () => {
@@ -8,10 +8,10 @@ const solve1 = () => {
     .then(data => console.log(findOrder(data)));
 };
 
-/* const solve2 = () => {
+const solve2 = () => {
   getRows()
-    .then(data => console.log((data)));
-}; */
+    .then(data => console.log(findTime(data)));
+};
 
 solve1();
-// solve2();
+solve2();
