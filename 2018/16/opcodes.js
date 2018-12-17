@@ -1,102 +1,22 @@
-/* eslint-disable no-bitwise */
-const addr = (a, b, c, ...reg) => {
-  reg[c] = reg[a] + reg[b];
-  return reg;
+/* eslint-disable no-bitwise, no-confusing-arrow */
+const ops = {
+  addr: (reg, a, b) => reg[a] + reg[b],
+  addi: (reg, a, b) => reg[a] + b,
+  mulr: (reg, a, b) => reg[a] * reg[b],
+  muli: (reg, a, b) => reg[a] * b,
+  banr: (reg, a, b) => reg[a] & reg[b],
+  bani: (reg, a, b) => reg[a] & b,
+  borr: (reg, a, b) => reg[a] | reg[b],
+  bori: (reg, a, b) => reg[a] | b,
+  setr: (reg, a) => reg[a],
+  seti: (reg, a) => a,
+  gtir: (reg, a, b) => a > reg[b] ? 1 : 0,
+  gtri: (reg, a, b) => reg[a] > b ? 1 : 0,
+  gtrr: (reg, a, b) => reg[a] > reg[b] ? 1 : 0,
+  eqir: (reg, a, b) => a === reg[b] ? 1 : 0,
+  eqri: (reg, a, b) => reg[a] === b ? 1 : 0,
+  eqrr: (reg, a, b) => reg[a] === reg[b] ? 1 : 0,
 };
-
-const addi = (a, b, c, ...reg) => {
-  reg[c] = reg[a] + b;
-  return reg;
-};
-
-const mulr = (a, b, c, ...reg) => {
-  reg[c] = reg[a] * reg[b];
-  return reg;
-};
-
-const muli = (a, b, c, ...reg) => {
-  reg[c] = reg[a] * b;
-  return reg;
-};
-
-const banr = (a, b, c, ...reg) => {
-  reg[c] = reg[a] & reg[b];
-  return reg;
-};
-
-const bani = (a, b, c, ...reg) => {
-  reg[c] = reg[a] & b;
-  return reg;
-};
-
-const borr = (a, b, c, ...reg) => {
-  reg[c] = reg[a] | reg[b];
-  return reg;
-};
-
-const bori = (a, b, c, ...reg) => {
-  reg[c] = reg[a] | b;
-  return reg;
-};
-
-const setr = (a, b, c, ...reg) => {
-  reg[c] = reg[a];
-  return reg;
-};
-
-const seti = (a, b, c, ...reg) => {
-  reg[c] = a;
-  return reg;
-};
-
-const gtir = (a, b, c, ...reg) => {
-  reg[c] = a > reg[b] ? 1 : 0;
-  return reg;
-};
-
-const gtri = (a, b, c, ...reg) => {
-  reg[c] = reg[a] > b ? 1 : 0;
-  return reg;
-};
-
-const gtrr = (a, b, c, ...reg) => {
-  reg[c] = reg[a] > reg[b] ? 1 : 0;
-  return reg;
-};
-
-const eqir = (a, b, c, ...reg) => {
-  reg[c] = a === reg[b] ? 1 : 0;
-  return reg;
-};
-
-const eqri = (a, b, c, ...reg) => {
-  reg[c] = reg[a] === b ? 1 : 0;
-  return reg;
-};
-
-const eqrr = (a, b, c, ...reg) => {
-  reg[c] = reg[a] === reg[b] ? 1 : 0;
-  return reg;
-};
-
-const ops = [
-  addr,
-  addi,
-  mulr,
-  muli,
-  banr,
-  bani,
-  borr,
-  bori,
-  setr,
-  seti,
-  gtir,
-  gtri,
-  gtrr,
-  eqir,
-  eqri,
-  eqrr,
-];
 
 const getRegistryBefore = (before) => {
   const [, numbers] = before.match(/Before:\s+\[(.*)]/);
@@ -104,20 +24,11 @@ const getRegistryBefore = (before) => {
 };
 
 const getRegistryAfter = (before) => {
-  const [, numbers] = before.match(/After:\s+\[(.*)\]/);
+  const [, numbers] = before.match(/After:\s+\[(.*)]/);
   return numbers.split(',').map(v => parseInt(v, 10));
 };
 
 const getInstructions = instructions => instructions.split(' ').map(v => parseInt(v, 10));
-
-const isEqual = (a, b) => {
-  if (a.length !== b.length) {
-    return false;
-  }
-  a.sort();
-  b.sort();
-  return a.every((value, index) => value === b[index]);
-};
 
 const calculate = (input) => {
   let atLeastThree = 0;
@@ -129,8 +40,12 @@ const calculate = (input) => {
       const registryBefore = getRegistryBefore(before);
       const [, a, b, c] = getInstructions(inst);
       const registryAfter = getRegistryAfter(after);
+      const matches = Object.values(ops).filter((op) => {
+        const registry = [...registryBefore];
+        registry[c] = op(registry, a, b);
+        return registry.join(',') === registryAfter.join(',');
+      }).length;
 
-      const matches = ops.filter(opcode => isEqual(registryAfter, opcode(a, b, c, ...registryBefore))).length;
       if (matches > 2) {
         atLeastThree += 1;
       }
