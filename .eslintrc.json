@@ -13,10 +13,6 @@
         "padded-blocks": 0,
         "no-param-reassign": "off",
         "no-shadow": "off",
-        "object-curly-newline": ["error", {
-            "ObjectExpression": {
-                "minProperties": 5
-            }
-        }]
+        "object-curly-newline": ["error", { "consistent": true }]
     }
 }
