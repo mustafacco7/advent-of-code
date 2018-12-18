@@ -9,41 +9,34 @@ const getBoundaries = (grid, x, y) => {
   return [x1, x2, y1, y2];
 };
 
-const getAdjacent = (grid, x, y) => {
+const getNeighbours = (grid, x, y) => {
   const [x1, x2, y1, y2] = getBoundaries(grid, x, y);
-  const adjacent = {};
+  const neighbours = {};
   for (let yy = y1; yy <= y2; yy += 1) {
     for (let xx = x1; xx <= x2; xx += 1) {
       if (!(xx === x && yy === y)) {
         const cell = grid[yy][xx];
-        adjacent[cell] = adjacent[cell] ? adjacent[cell] + 1 : 1;
+        neighbours[cell] = neighbours[cell] ? neighbours[cell] + 1 : 1;
       }
     }
   }
-  return adjacent;
+  return neighbours;
 };
 
-const numberOfTrees = adjacents => Object.entries(adjacents).reduce((sum, [cell, count]) => {
-  if (cell === '|') {
-    sum += count;
-  }
-  return sum;
-}, 0);
-
-const numberOfLumberYards = adjacents => Object.entries(adjacents).reduce((sum, [cell, count]) => {
-  if (cell === '#') {
+const getNumberOfTypeForNeighbours = (neighbours, type) => Object.entries(neighbours).reduce((sum, [cell, count]) => {
+  if (cell === type) {
     sum += count;
   }
   return sum;
 }, 0);
 
 
-const getNewCell = (cell, adjacents) => {
+const getNewCell = (cell, neighbours) => {
   const transitions = {
-    '.': adjacents => numberOfTrees(adjacents) > 2 ? '|' : '.',
-    '|': adjacents => numberOfLumberYards(adjacents) > 2 ? '#' : '|',
-    '#': (adjacents) => {
-      if (numberOfLumberYards(adjacents) > 0 && numberOfTrees(adjacents) > 0) {
+    '.': neighbours => getNumberOfTypeForNeighbours(neighbours, '|') > 2 ? '|' : '.',
+    '|': neighbours => getNumberOfTypeForNeighbours(neighbours, '#') > 2 ? '#' : '|',
+    '#': (neighbours) => {
+      if (getNumberOfTypeForNeighbours(neighbours, '#') > 0 && getNumberOfTypeForNeighbours(neighbours, '|') > 0) {
         return '#';
       }
 
@@ -51,42 +44,18 @@ const getNewCell = (cell, adjacents) => {
     },
   };
 
-  return transitions[cell](adjacents);
+  return transitions[cell](neighbours);
 };
 
 
-const getNumberOftrees = grid => grid.reduce((sum, row, y) => {
+const getNumberOfTypeForGrid = (grid, type) => grid.reduce((sum, row) => {
   row.forEach((cell) => {
-    if (cell === '|') {
+    if (cell === type) {
       sum += 1;
     }
   });
   return sum;
 }, 0);
-
-const getNumberOfLumberYards = grid => grid.reduce((sum, row, y) => {
-  row.forEach((cell) => {
-    if (cell === '#') {
-      sum += 1;
-    }
-  });
-  return sum;
-}, 0);
-
-
-const printGrid = (grid) => {
-  /*const string = grid.reduce((string, row) => {
-    row.forEach((cell) => {
-      string += cell
-    });
-    string += '\n';
-    return string;
-  }, '');
-*/
-  const trees = getNumberOftrees(grid);
-  const lumberYards = getNumberOfLumberYards(grid);
-  console.log(trees * lumberYards);
-};
 
 const calculateLumber = (rows, numberOfMinutes = 10) => {
   let grid = rows.reduce((grid, row, y) => {
@@ -104,17 +73,16 @@ const calculateLumber = (rows, numberOfMinutes = 10) => {
     for (let y = 0; y < maxY; y += 1) {
       newGrid[y] = [];
       for (let x = 0; x < maxX; x += 1) {
-        const adjacents = getAdjacent(grid, x, y);
-        const newCell = getNewCell(grid[y][x], adjacents);
+        const neighbours = getNeighbours(grid, x, y);
+        const newCell = getNewCell(grid[y][x], neighbours);
         newGrid[y].push(newCell);
       }
     }
     grid = newGrid;
-    printGrid(grid);
   }
 
-  const trees = getNumberOftrees(grid);
-  const lumberYards = getNumberOfLumberYards(grid);
+  const trees = getNumberOfTypeForGrid(grid, '|');
+  const lumberYards = getNumberOfTypeForGrid(grid, '#');
   return trees * lumberYards;
 };
 
