@@ -3,4 +3,5 @@ node_modules
 .DS_Store
 advent-of-code.iml
 .idea
+yarn-error.log
 
