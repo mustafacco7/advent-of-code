@@ -22,3 +22,5 @@ const solve2 = async () => console.log(`Part2: ${await sumFuel(true)}`);
 
 solve1();
 solve2();
+
+module.exports = { getFuel };
