@@ -1,6 +1,6 @@
-#!/usr/env/node
+#!/usr/bin/env/node
 
-import { getRows } from '../../utils';
+const { getRows } = require('../../utils');
 
 const solve1 = () => {
   getRows()
