@@ -2,35 +2,23 @@
 
 const { getRows } = require('../../utils');
 
-const getFuel = (mass) => {
+const getFuel = (mass, part2) => {
   let fuel = Math.floor(mass / 3) - 2;
-  if (fuel > 8) {
-    fuel += getFuel(fuel);
+  if (part2 && (fuel > 8)) {
+    fuel += getFuel(fuel, part2);
   }
   return fuel;
 };
 
-const solve1 = () => {
-  getRows()
-    .then((rows) => {
-      const totalFuel = rows.reduce((sum, mass) => {
-        sum += Math.floor(mass / 3) - 2;
-        return sum;
-      }, 0);
-      console.log(`Part 1: ${totalFuel}`);
-    });
-};
+const sumFuel = (part2 = false) => getRows()
+  .then(rows => rows
+    .reduce((sum, mass) => {
+      sum += getFuel(mass, part2);
+      return sum;
+    }, 0));
 
-const solve2 = () => {
-  getRows()
-    .then((rows) => {
-      const totalFuel = rows.reduce((sum, mass) => {
-        sum += getFuel(mass);
-        return sum;
-      }, 0);
-      console.log(`Part 2: ${totalFuel}`);
-    });
-};
+const solve1 = async () => console.log(`Part1: ${await sumFuel()}`);
+const solve2 = async () => console.log(`Part2: ${await sumFuel(true)}`);
 
 solve1();
 solve2();
