@@ -2,6 +2,14 @@
 
 const { getRows } = require('../../utils');
 
+const getFuel = (mass) => {
+  let fuel = Math.floor(mass / 3) - 2;
+  if (fuel > 8) {
+    fuel += getFuel(fuel);
+  }
+  return fuel;
+};
+
 const solve1 = () => {
   getRows()
     .then((rows) => {
@@ -16,9 +24,13 @@ const solve1 = () => {
 const solve2 = () => {
   getRows()
     .then((rows) => {
-      console.log(rows);
+      const totalFuel = rows.reduce((sum, mass) => {
+        sum += getFuel(mass);
+        return sum;
+      }, 0);
+      console.log(`Part 2: ${totalFuel}`);
     });
 };
 
 solve1();
-// solve2();
+solve2();
