@@ -32,7 +32,7 @@ const solve1 = () => {
       const program = row.split(',').map(i => Number(i));
       program[1] = 12;
       program[2] = 2;
-      console.log(`Part 1: ${run(program, 0)[0]}`);
+      console.log(`Part 1: ${run(program)[0]}`);
     });
 };
 
@@ -51,12 +51,10 @@ const solve2 = () => {
 
       nouns.some((noun) => verbs
         .some((verb) => {
-          const program = row.split(',')
-            .map(i => Number(i));
+          const program = row.split(',').map(i => Number(i));
           program[1] = noun;
           program[2] = verb;
-          const result = run(program, 0)[0];
-          if (result === goal) {
+          if (goal === run(program)[0]) {
             console.log(`Part 2: ${100 * noun + verb}`);
             return true;
           }
