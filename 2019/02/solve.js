@@ -17,11 +17,11 @@ const operations = {
   2: multiply,
 };
 
-const step = (program, currentIndex = 0) => {
-  if (operations[program[currentIndex]]) {
-    program = operations[program[currentIndex]](program, currentIndex);
-    currentIndex += 4;
-    step(program, currentIndex);
+const run = (program, instructionPointer = 0) => {
+  if (operations[program[instructionPointer]]) {
+    program = operations[program[instructionPointer]](program, instructionPointer);
+    instructionPointer += 4;
+    run(program, instructionPointer);
   }
   return program;
 };
@@ -32,18 +32,40 @@ const solve1 = () => {
       const program = row.split(',').map(i => Number(i));
       program[1] = 12;
       program[2] = 2;
-      console.log(`Part 1: ${step(program, 0)[0]}`);
+      console.log(`Part 1: ${run(program, 0)[0]}`);
     });
 };
 
 const solve2 = () => {
   getRow()
     .then((row) => {
-      //console.log(row);
+      const goal = 19690720;
+
+      const nouns = Array(100)
+        .fill(1)
+        .map((_, i) => i);
+
+      const verbs = Array(100)
+        .fill(1)
+        .map((_, i) => i);
+
+      nouns.some((noun) => verbs
+        .some((verb) => {
+          const program = row.split(',')
+            .map(i => Number(i));
+          program[1] = noun;
+          program[2] = verb;
+          const result = run(program, 0)[0];
+          if (result === goal) {
+            console.log(`Part 2: ${100 * noun + verb}`);
+            return true;
+          }
+          return false;
+        }));
     });
 };
 
 solve1();
-//solve2();
+solve2();
 
-module.exports = { step };
+module.exports = { run };
