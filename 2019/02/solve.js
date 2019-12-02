@@ -1,5 +1,4 @@
 #!/usr/bin/env/node
-
 const { getRow } = require('../../utils');
 
 const add = (arr, currentIndex) => {
@@ -49,9 +48,12 @@ const solve2 = () => {
         .fill(1)
         .map((_, i) => i);
 
+      const input = row.split(',').map(i => Number(i));
+
       nouns.some((noun) => verbs
         .some((verb) => {
-          const program = row.split(',').map(i => Number(i));
+          // Clone the input so we have a fresh start on every run
+          const program = [...input];
           program[1] = noun;
           program[2] = verb;
           if (goal === run(program)[0]) {
