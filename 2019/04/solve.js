@@ -1,7 +1,10 @@
 #!/usr/bin/env/node
 
+const getNumbers = (i) => (`${i}`).split('').map(n => Number(n));
+
 const isIncreasing = (i) => {
-  const numbers = (`${i}`).split('').map(n => Number(n));
+  const numbers = getNumbers(i);
+  // eslint-disable-next-line prefer-const
   let [current, ...rest] = numbers;
   const notIncreasing = rest.some((number) => {
     if (number >= current) {
@@ -16,17 +19,16 @@ const isIncreasing = (i) => {
 };
 
 const isAdjacent = (i) => {
-  const numbers = (`${i}`).split('').map(n => Number(n));
+  const numbers = getNumbers(i);
+  // eslint-disable-next-line prefer-const
   let [current, ...rest] = numbers;
-  const isAdjacent = rest.some((number) => {
+  return rest.some((number) => {
     if (current === number) {
       return true;
     }
     current = number;
     return false;
   });
-
-  return isAdjacent;
 };
 
 const isValid = (i) => isIncreasing(i) && isAdjacent(i);
@@ -38,7 +40,6 @@ const solve1 = () => {
 
   for (let i = start; i <= end; i += 1) {
     if (isValid(i)) {
-      console.log(i);
       matches += 1;
     }
   }
