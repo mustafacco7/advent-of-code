@@ -18,18 +18,7 @@ const isIncreasing = (i) => {
   return !notIncreasing;
 };
 
-const isAdjacent = (i) => {
-  const numbers = getNumbers(i);
-  // eslint-disable-next-line prefer-const
-  let [current, ...rest] = numbers;
-  return rest.some((number) => {
-    if (current === number) {
-      return true;
-    }
-    current = number;
-    return false;
-  });
-};
+const isAdjacent = (i) => `${i}`.match(/(\d)\1+/) !== null;
 
 const isAdjacentPart2 = (i) => {
   const numbers = getNumbers(i);
