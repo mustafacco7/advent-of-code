@@ -1,4 +1,4 @@
-const { run } = require('./solve');
+const { run } = require('./intcode');
 
 describe('Day 2', () => {
   test('it should solve part 1 test cases', () => {
