@@ -3,7 +3,7 @@
 const { getRow } = require('../../utils');
 
 const getImageData = ({ digits, width, height }) => {
-  let image = [];
+  let layers = [];
   const min = { zeros: Infinity, ones: 0, twos: 0 };
   while (digits.length) {
     let layer = [];
@@ -22,29 +22,57 @@ const getImageData = ({ digits, width, height }) => {
       min.ones = ones;
       min.twos = twos;
     }
-    image = [...image, layer];
+    layers = [...layers, layer];
   }
-  return { image, checksum: min.ones * min.twos };
+  return { layers, checksum: min.ones * min.twos };
+};
+
+const getPixel = ({ layers, layer, row, column }) => {
+  const pixel = layers[layer][row][column];
+  if (pixel === 2) {
+    layer += 1;
+    return getPixel({ layers, layer, row, column });
+  }
+  return pixel;
+};
+
+const renderImage = (layers, width, height) => {
+  const image = Array(height).fill(1).map(() => Array(width).fill(' '));
+  image.forEach((_, row) => {
+    image[row].forEach((_, column) => {
+      image[row][column] = getPixel({ layers, row, column, layer: 0 });
+    });
+  });
+  return image;
+};
+
+const printImage = (image) => {
+  image.forEach(row => console.log(row.map(pixel => (pixel ? '*' : '.')).join('')));
 };
 
 const solve1 = () => {
   getRow()
-    .then((digits) => {
+    .then((row) => {
       const width = 25;
       const height = 6;
-      const { checksum } = getImageData({ digits: digits.split(''), width, height });
+      const { checksum } = getImageData({ digits: row.split(''), width, height });
       console.log(`Part 1: ${checksum}`);
     });
 };
 
 const solve2 = () => {
   getRow()
-    .then((rows) => {
-      //console.log(rows);
+    .then((row) => {
+      const width = 25;
+      const height = 6;
+      const { layers } = getImageData({ digits: row.split(''), width, height });
+      const image = renderImage(layers, width, height);
+      console.log('Part 2:');
+      printImage(image);
     });
 };
 
 solve1();
 solve2();
 
-module.exports = { getImageData };
+module.exports = { getImageData, renderImage };
