@@ -20,16 +20,18 @@ const plotWires = (moves) => {
   const wires = {};
   moves.forEach((instructions, wire) => {
     const position = { x: 0, y: 0 };
+    let step = 1;
     instructions.forEach(({ direction, distance }) => {
       Array(distance).fill(1).forEach(() => {
         const { x, y } = directions[direction];
         position.x += x;
         position.y += y;
         // We don't count intersections between the same wire
-        if (wires[key(position)] && wires[key(position)].includes(wire)) {
+        if (wires[key(position)] && wires[key(position)].filter((entry) => entry.wire === wire).length) {
           return;
         }
-        wires[key(position)] = wires[key(position)] ? [...wires[key(position)], wire] : [wire];
+        wires[key(position)] = wires[key(position)] ? [...wires[key(position)], { wire, step }] : [{ wire, step }];
+        step += 1;
       });
     });
   });
@@ -37,20 +39,26 @@ const plotWires = (moves) => {
   return wires;
 };
 
-const findIntersections = (wires) => Object
-  .entries(wires)
-  .filter(([, hits]) => hits.length > 1)
-  .map(([coordinate]) => coordinate
-    .split(',')
-    .map(Number));
-
-const getMinDistance = (instructions) => {
+const findIntersections = (instructions) => {
   const moves = getMoves(instructions);
   const wires = plotWires(moves);
-  const intersections = findIntersections(wires);
-  const distances = intersections.map(([x, y]) => Math.abs(x) + Math.abs(y));
-  return Math.min(...distances);
+  return Object
+    .entries(wires)
+    .filter(([, hits]) => hits.length > 1);
 };
+
+const getMinDistance = (instructions) => Math.min(...findIntersections(instructions)
+  .map(([coordinate]) => coordinate.split(','))
+  .map(([x, y]) => Math.abs(x) + Math.abs(y)));
+
+
+const getMinSteps = (instructions) => Math.min(...findIntersections(instructions)
+  .map(([, hits]) => hits
+    .map(({ step }) => step)
+    .reduce((sum, step) => {
+      sum += step;
+      return sum;
+    }), 0));
 
 const solve1 = () => {
   getRows()
@@ -62,11 +70,11 @@ const solve1 = () => {
 const solve2 = () => {
   getRows()
     .then((rows) => {
-      const instructions = getMoves(rows);
+      console.log(`Part 2: ${getMinSteps(rows)}`);
     });
 };
 
-solve1();
+// solve1();
 solve2();
 
-module.exports = { getMinDistance };
+module.exports = { getMinDistance, getMinSteps };
