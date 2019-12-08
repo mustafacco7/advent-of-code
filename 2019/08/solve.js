@@ -2,7 +2,7 @@
 
 const { getRow } = require('../../utils');
 
-const getImageData = ({ digits, width, height }) => {
+const getImageData = ({ digits, width = 25, height = 6}) => {
   let layers = [];
   const min = { zeros: Infinity, ones: 0, twos: 0 };
   while (digits.length) {
@@ -36,8 +36,10 @@ const getPixel = ({ layers, layer, row, column }) => {
   return pixel;
 };
 
-const renderImage = (layers, width, height) => {
-  const image = Array(height).fill(1).map(() => Array(width).fill(' '));
+const renderImage = (layers) => {
+  const width = layers[0][0].length;
+  const height = layers[0].length;
+  const image = Array(height).fill(1).map(() => Array(width).fill(''));
   return image
     .map((_, row) => image[row]
       .map((_, column) => getPixel({ layers, row, column, layer: 0 })));
@@ -50,9 +52,7 @@ const printImage = (image) => {
 const solve1 = () => {
   getRow()
     .then((row) => {
-      const width = 25;
-      const height = 6;
-      const { checksum } = getImageData({ digits: row.split(''), width, height });
+      const { checksum } = getImageData({ digits: row.split('') });
       console.log(`Part 1: ${checksum}`);
     });
 };
@@ -60,10 +60,8 @@ const solve1 = () => {
 const solve2 = () => {
   getRow()
     .then((row) => {
-      const width = 25;
-      const height = 6;
-      const { layers } = getImageData({ digits: row.split(''), width, height });
-      const image = renderImage(layers, width, height);
+      const { layers } = getImageData({ digits: row.split('') });
+      const image = renderImage(layers);
       console.log('Part 2:');
       printImage(image);
     });

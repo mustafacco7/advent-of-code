@@ -15,6 +15,6 @@ describe('Day 8', () => {
     const width = 2;
     const height = 2;
     const { layers } = getImageData({ digits: input.split(''), width, height });
-    expect(renderImage(layers, width, height)).toStrictEqual([[0, 1], [1, 0]]);
+    expect(renderImage(layers)).toStrictEqual([[0, 1], [1, 0]]);
   });
 });
