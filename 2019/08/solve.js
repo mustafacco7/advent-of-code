@@ -38,12 +38,9 @@ const getPixel = ({ layers, layer, row, column }) => {
 
 const renderImage = (layers, width, height) => {
   const image = Array(height).fill(1).map(() => Array(width).fill(' '));
-  image.forEach((_, row) => {
-    image[row].forEach((_, column) => {
-      image[row][column] = getPixel({ layers, row, column, layer: 0 });
-    });
-  });
-  return image;
+  return image
+    .map((_, row) => image[row]
+      .map((_, column) => getPixel({ layers, row, column, layer: 0 })));
 };
 
 const printImage = (image) => {
