@@ -21,12 +21,10 @@ const getImageData = ({ digits, width, height }) => {
       min.zeros = zeros;
       min.ones = ones;
       min.twos = twos;
-      console.log(min);
     }
     image = [...image, layer];
   }
-  console.log(image);
-  return min.ones * min.twos;
+  return { image, checksum: min.ones * min.twos };
 };
 
 const solve1 = () => {
@@ -34,8 +32,8 @@ const solve1 = () => {
     .then((digits) => {
       const width = 25;
       const height = 6;
-      const product = getImageData({ digits: digits.split(''), width, height });
-      console.log(`Part 1: ${product}`);
+      const { checksum } = getImageData({ digits: digits.split(''), width, height });
+      console.log(`Part 1: ${checksum}`);
     });
 };
 
