@@ -2,11 +2,6 @@
 
 const { getRows } = require('../../utils');
 
-const getMoves = (wires) => wires
-  .map((wire) => wire.split(',')
-    .map(move => move.match(/([RLDU])(\d+)/u))
-    .map(([, direction, distance]) => ({ direction, distance: Number(distance) })));
-
 const directions = {
   U: { x: 0, y: -1 },
   D: { x: 0, y: 1 },
@@ -15,50 +10,54 @@ const directions = {
 };
 
 const key = ({ x, y }) => `${x},${y}`;
+const unkey = (key) => [key.split(',').map(Number)].map(([x, y]) => ({ x, y }));
 
-const plotWires = (moves) => {
-  const wires = {};
-  moves.forEach((instructions, wire) => {
-    const position = { x: 0, y: 0 };
-    let step = 1;
-    instructions.forEach(({ direction, distance }) => {
-      Array(distance).fill(1).forEach(() => {
-        const { x, y } = directions[direction];
-        position.x += x;
-        position.y += y;
-        // We don't count intersections between the same wire
-        if (wires[key(position)] && wires[key(position)].filter((entry) => entry.wire === wire).length) {
-          return;
-        }
-        wires[key(position)] = wires[key(position)] ? [...wires[key(position)], { wire, step }] : [{ wire, step }];
-        step += 1;
-      });
+const manhattanDistance = ({ x, y }) => Math.abs(x) + Math.abs(y);
+const travelDistance = (wire, point) => wire.indexOf(key(point)) + 1;
+
+const getMoves = (wires) => wires
+  .map((wire) => wire
+    .split(',')
+    .map(move => move.match(/([RLDU])(\d+)/u))
+    .map(([, direction, distance]) => ({ direction, distance: Number(distance) })));
+
+const getPoints = (wire) => {
+  const position = { x: 0, y: 0 };
+  return wire.reduce((arr, { direction, distance }) => {
+    Array(distance).fill(1).forEach(() => {
+      const { x, y } = directions[direction];
+      position.x += x;
+      position.y += y;
+      arr.push(key(position));
     });
-  });
-
-  return wires;
+    return arr;
+  }, []);
 };
 
-const findIntersections = (instructions) => {
-  const moves = getMoves(instructions);
-  const wires = plotWires(moves);
-  return Object
-    .entries(wires)
-    .filter(([, hits]) => hits.length > 1);
+const findIntersections = (wires) => {
+  const sets = wires.map(wire => new Set(wire));
+  return wires[0]
+    .filter(value => sets
+      .every(wire => wire.has(value)))
+    .map(unkey)
+    .flat();
 };
 
-const getMinDistance = (instructions) => Math.min(...findIntersections(instructions)
-  .map(([coordinate]) => coordinate.split(','))
-  .map(([x, y]) => Math.abs(x) + Math.abs(y)));
+const getMinDistance = (instructions) => Math.min(
+  ...findIntersections(
+    getMoves(instructions).map(getPoints),
+  )
+    .map(manhattanDistance),
+);
 
-
-const getMinSteps = (instructions) => Math.min(...findIntersections(instructions)
-  .map(([, hits]) => hits
-    .map(({ step }) => step)
-    .reduce((sum, step) => {
-      sum += step;
-      return sum;
-    }), 0));
+const getMinSteps = (instructions) => {
+  const wires = getMoves(instructions).map(getPoints);
+  return Math.min(
+    ...findIntersections(wires)
+      // eslint-disable-next-line no-return-assign
+      .map((point) => wires.map((wire) => travelDistance(wire, point)).reduce((sum, distance) => sum += distance, 0)),
+  );
+};
 
 const solve1 = () => {
   getRows()
@@ -74,7 +73,7 @@ const solve2 = () => {
     });
 };
 
-// solve1();
+solve1();
 solve2();
 
 module.exports = { getMinDistance, getMinSteps };
