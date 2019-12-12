@@ -1,4 +1,4 @@
-const { calculateMoonEnergy, calculateNextStep, calculatePositions, calculateVelocities } = require('./solve');
+const { calculateMoonEnergy, calculateNewState, calculatePositions, calculateVelocities } = require('./solve');
 
 describe('Day 2', () => {
 
@@ -36,7 +36,7 @@ describe('Day 2', () => {
   });
 
   test('it should calculate correct state after step 1', () => {
-    expect(calculateNextStep(moons)).toEqual([
+    expect(calculateNewState(moons)).toEqual([
       { position: { x: 2, y: -1, z: 1 }, velocity: { x: 3, y: -1, z: -1 } },
       { position: { x: 3, y: -7, z: -4 }, velocity: { x: 1, y: 3, z: 3 } },
       { position: { x: 1, y: -7, z: 5 }, velocity: { x: -3, y: 1, z: -3 } },
@@ -62,15 +62,10 @@ describe('Day 2', () => {
     ]);
   });
 
-  let moonsAfterStep10;
   test('it should calculate correct state after step 10', () => {
-    Array(10).fill(1).forEach(() => {
-      moons = calculateNextStep(moons);
-    });
+    const newState = calculateNewState(moons, 10);
 
-    moonsAfterStep10 = moons;
-
-    expect(moons).toEqual([
+    expect(newState).toEqual([
       { position: { x: 2, y: 1, z: -3 }, velocity: { x: -3, y: -2, z: 1 } },
       { position: { x: 1, y: -8, z: 0 }, velocity: { x: -1, y: 1, z: 3 } },
       { position: { x: 3, y: -6, z: 1 }, velocity: { x: 3, y: 2, z: -3 } },
@@ -79,7 +74,7 @@ describe('Day 2', () => {
   });
 
   test('it should calculate correct energy after step 10', () => {
-    const totalMoonEnergy = moonsAfterStep10.reduce((sum, moon) => {
+    const totalMoonEnergy = calculateNewState(moons, 10).reduce((sum, moon) => {
       sum += calculateMoonEnergy(moon);
       return sum;
     }, 0);

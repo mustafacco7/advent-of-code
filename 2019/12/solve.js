@@ -2,6 +2,15 @@
 
 const { getRows } = require('../../utils');
 
+const parseMoonsFromInput = (rows) => rows
+  .map((row) => {
+    const [, x, y, z] = row.match(/x=(-?\d+), y=(-?\d+), z=(-?\d+)/);
+    return {
+      position: { x: Number(x), y: Number(y), z: Number(z) },
+      velocity: { x: 0, y: 0, z: 0 },
+    };
+  });
+
 const calculateMoonPotentialEnergy = (moon) => {
   const { x, y, z } = moon.position;
   return Math.abs(x) + Math.abs(y) + Math.abs(z);
@@ -61,31 +70,20 @@ const calculateNextStep = (moons) => {
   return moons;
 };
 
+const calculateNewState = (moons, steps = 1) => {
+  Array(steps).fill(1).forEach(() => {
+    moons = calculateNextStep(moons);
+  });
+
+  return moons;
+};
+
 const solve1 = () => {
   getRows()
     .then((rows) => {
-      let moons = rows.map((row) => {
-        const [, x, y, z] = row.match(/x=(-?\d+), y=(-?\d+), z=(-?\d+)/);
-        return {
-          position: {
-            x: Number(x),
-            y: Number(y),
-            z: Number(z),
-          },
-          velocity: {
-            x: 0,
-            y: 0,
-            z: 0,
-          },
-        };
-      });
-      const steps = 1000;
+      const totalEnergy = calculateTotalMoonEnergy(calculateNewState(parseMoonsFromInput(rows), 1000));
 
-      Array(steps).fill(1).forEach(() => {
-        moons = calculateNextStep(moons);
-      });
-
-      console.log(`Part 1: ${calculateTotalMoonEnergy(moons)}`);
+      console.log(`Part 1: ${totalEnergy}`);
     });
 };
 
@@ -99,4 +97,4 @@ const solve2 = () => {
 solve1();
 solve2();
 
-module.exports = { calculateMoonEnergy, calculateNextStep, calculatePositions, calculateVelocities };
+module.exports = { calculateMoonEnergy, calculateNextStep, calculateNewState, calculatePositions, calculateVelocities };
