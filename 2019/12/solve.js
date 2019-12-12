@@ -1,5 +1,6 @@
 #!/usr/bin/env/node
 
+const { clone } = require('../../utils');
 const { getRows } = require('../../utils');
 
 const parseMoonsFromInput = (rows) => rows
@@ -48,7 +49,7 @@ const getDelta = (a, b) => {
 
 const calculateVelocities = (moons) => moons
   .map((moon, index) => {
-    const otherMoons = [...moons];
+    const otherMoons = clone(moons);
     otherMoons.splice(index, 1);
     return otherMoons.reduce(({ x, y, z }, otherMoon) => {
       x += getDelta(otherMoon.position.x, moon.position.x);
@@ -61,22 +62,25 @@ const calculateVelocities = (moons) => moons
 const calculateNextStep = (moons) => {
   const velocities = calculateVelocities(moons);
   const positions = calculatePositions(moons, velocities);
-  moons.map((moon, index) => {
+  return moons.map((moon, index) => {
     moon.position = positions[index];
     moon.velocity = velocities[index];
     return moon;
   });
-
-  return moons;
 };
 
 const calculateNewState = (moons, steps = 1) => {
   Array(steps).fill(1).forEach(() => {
-    moons = calculateNextStep(moons);
+    moons = calculateNextStep(clone(moons));
   });
 
   return moons;
 };
+
+const isSameState = (a, b) => a
+  .every((state, index) => ['x', 'y', 'z']
+    .every((axis) => (state.position[axis] === b[index].position[axis])
+      && (state.velocity[axis] === b[index].velocity[axis])));
 
 const solve1 = () => {
   getRows()
@@ -90,11 +94,21 @@ const solve1 = () => {
 const solve2 = () => {
   getRows()
     .then((rows) => {
-      // console.log(rows);
+      /* const moons = parseMoonsFromInput(rows);
+      let newState = calculateNewState(clone(moons));
+      let i = 1;
+      console.log(i); */
     });
 };
 
 solve1();
 solve2();
 
-module.exports = { calculateMoonEnergy, calculateNextStep, calculateNewState, calculatePositions, calculateVelocities };
+module.exports = {
+  calculateMoonEnergy,
+  calculateNextStep,
+  calculateNewState,
+  calculatePositions,
+  calculateVelocities,
+  isSameState,
+};
