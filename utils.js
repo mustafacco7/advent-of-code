@@ -71,4 +71,6 @@ const getData = async () => {
 const getRows = () => getData().then(data => data.trim().split('\n'));
 const getRow = () => getRows().then(data => data[0]);
 
-module.exports = { getRow, getRows };
+const clone = (object) => JSON.parse(JSON.stringify(object));
+
+module.exports = { getRow, getRows, clone };
