@@ -33,7 +33,7 @@ const solve1 = () => {
           .split('')
           .map(Number);
       });
-      console.log(signal.join(''));
+      console.log(`Part 1: ${signal.slice(0, 8).join('')}`);
     });
 };
 
