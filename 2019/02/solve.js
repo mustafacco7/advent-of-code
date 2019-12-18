@@ -1,6 +1,6 @@
 #!/usr/bin/env/node
 const { getRow } = require('../../utils');
-const { run } = require('./intcode');
+const { run } = require('../intcode/intcode');
 
 const solve1 = () => {
   getRow()
