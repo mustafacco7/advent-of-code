@@ -72,5 +72,12 @@ const getRows = () => getData().then(data => data.trim().split('\n'));
 const getRow = () => getRows().then(data => data[0]);
 
 const clone = (object) => JSON.parse(JSON.stringify(object));
+const grouped = (arr, groupSize) => arr
+  .reduce((acc, item, index) => {
+    // eslint-disable-next-line no-unused-expressions
+    (index % groupSize === 0) ? acc.push([item]) : acc[acc.length - 1].push(item);
+    return acc;
+  }, []);
+const minBy = cb => (a, b) => (cb(b) < cb(a) ? b : a);
 
-module.exports = { getRow, getRows, clone };
+module.exports = { getRow, getRows, clone, grouped, minBy };

@@ -1,12 +1,12 @@
 
-const { getImageData, renderImage } = require('./solve');
+const { getChecksum, getImageData, renderImage } = require('./solve');
 
 describe('Day 8', () => {
   it('should solve part 1 examples', () => {
     const input = '123456789012';
     const width = 3;
     const height = 2;
-    const { checksum } = getImageData({ digits: input.split(''), width, height });
+    const checksum = getChecksum({ digits: input.split(''), width, height });
     expect(checksum).toBe(1);
   });
 

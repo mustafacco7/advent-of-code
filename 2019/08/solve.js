@@ -1,31 +1,30 @@
 #!/usr/bin/env/node
 
-const { getRow } = require('../../utils');
+const { getRow, grouped, minBy } = require('../../utils');
+
+const getItemCount = (layer, item) => layer.filter(pixel => pixel === item).length;
+
+const getLayers = ({ digits, width = 25, height = 6 }) => grouped(digits, width * height);
+
+const getChecksum = ({ digits, width = 25, height = 6 }) => {
+  const layer = getLayers({ digits, width, height })
+    .reduce(minBy((layer) => getItemCount(layer, '0')));
+  return getItemCount(layer, '1') * getItemCount(layer, '2');
+};
 
 const getImageData = ({ digits, width = 25, height = 6}) => {
   let layers = [];
-  const min = { zeros: Infinity, ones: 0, twos: 0 };
   while (digits.length) {
     let layer = [];
-    let zeros = 0;
-    let ones = 0;
-    let twos = 0;
     Array(height).fill(1).forEach(() => {
       const row = digits.splice(0, width).map(Number);
-      zeros += row.filter(number => number === 0).length;
-      ones += row.filter(number => number === 1).length;
-      twos += row.filter(number => number === 2).length;
       layer = [...layer, row];
     });
-    if (zeros < min.zeros) {
-      min.zeros = zeros;
-      min.ones = ones;
-      min.twos = twos;
-    }
     layers = [...layers, layer];
   }
-  return { layers, checksum: min.ones * min.twos };
+  return { layers };
 };
+
 
 const getPixel = ({ layers, layer, row, column }) => {
   const pixel = layers[layer][row][column];
@@ -52,8 +51,7 @@ const printImage = (image) => {
 const solve1 = () => {
   getRow()
     .then((row) => {
-      const { checksum } = getImageData({ digits: row.split('') });
-      console.log(`Part 1: ${checksum}`);
+      console.log(`Part 1: ${getChecksum({ digits: row.split('') })}`);
     });
 };
 
@@ -70,4 +68,4 @@ const solve2 = () => {
 solve1();
 solve2();
 
-module.exports = { getImageData, renderImage };
+module.exports = { getChecksum, getImageData, renderImage };
