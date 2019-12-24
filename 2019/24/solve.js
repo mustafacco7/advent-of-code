@@ -2,6 +2,8 @@
 
 const { getRows } = require('../../utils');
 
+const parseInput = (rows) => rows.map(row => row.split(''));
+
 const isBug = cell => cell === '#';
 
 const becomesBug = (cell, state, x, y) => {
@@ -23,11 +25,11 @@ const becomesBug = (cell, state, x, y) => {
 };
 
 const calculateStep = (state) => state.reduce((accY, row, y) => {
-  const newRow = row.split('').reduce((accX, cell, x) => {
+  const newRow = row.reduce((accX, cell, x) => {
     accX.push(becomesBug(cell, state, x, y) ? '#' : '.');
     return accX;
   }, []);
-  accY.push(newRow.join(''));
+  accY.push(newRow);
   return accY;
 }, []);
 
@@ -38,14 +40,6 @@ const calculateSteps = (state, numberOfSteps) => {
   }
   return nextStep;
 };
-
-const calculateBiodiversityRating = (state) => String(state)
-  .replace(/,/g, '')
-  .split('')
-  .reduce((sum, cell, ix) => {
-    sum += isBug(cell) ? 2 ** ix : 0;
-    return sum;
-  }, 0);
 
 const findDuplicateState = (state) => {
   let found = false;
@@ -59,13 +53,21 @@ const findDuplicateState = (state) => {
       hashes.add(hash);
     }
   }
-  return calculateBiodiversityRating(state);
+  return state;
 };
+
+const calculateBiodiversityRating = (state) => findDuplicateState(state)
+  .flat()
+  .reduce((sum, cell, ix) => {
+    sum += isBug(cell) ? 2 ** ix : 0;
+    return sum;
+  }, 0);
+
 
 const solve1 = () => {
   getRows()
     .then((rows) => {
-      console.log(findDuplicateState(rows));
+      console.log(calculateBiodiversityRating(parseInput(rows)));
     });
 };
 
@@ -79,4 +81,4 @@ const solve2 = () => {
 solve1();
 // solve2();
 
-module.exports = { calculateSteps, findDuplicateState };
+module.exports = { calculateSteps, findDuplicateState, calculateBiodiversityRating };
