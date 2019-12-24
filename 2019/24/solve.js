@@ -32,18 +32,10 @@ const calculateStep = (state) => state.reduce((accY, row, y) => {
 }, []);
 
 const calculateSteps = (state, numberOfSteps) => {
-  const hashes = new Set();
   let nextStep = calculateStep(state);
-  hashes.add(String(nextStep));
   for (let i = 0; i < numberOfSteps - 1; i += 1) {
     nextStep = calculateStep(nextStep);
-    if (hashes.has(String(nextStep))) {
-      console.log('Found!', nextStep, numberOfSteps);
-    } else {
-      hashes.add(String(nextStep));
-    }
   }
-  console.log(hashes);
   return nextStep;
 };
 
@@ -57,11 +49,9 @@ const calculateBiodiversityRating = (state) => String(state)
 
 const findDuplicateState = (state) => {
   let found = false;
-  let i = 0;
   const hashes = new Set();
   while (!found) {
     state = calculateStep(state);
-    i += 1;
     const hash = String(state);
     if (hashes.has(hash)) {
       found = true;
@@ -71,6 +61,7 @@ const findDuplicateState = (state) => {
   }
   return calculateBiodiversityRating(state);
 };
+
 const solve1 = () => {
   getRows()
     .then((rows) => {
