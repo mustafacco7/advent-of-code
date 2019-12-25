@@ -6,22 +6,16 @@ const parseInput = (rows) => rows.map(row => row.split(''));
 
 const isBug = cell => cell === '#';
 
-const becomesBug = (cell, state, x, y) => {
-  let numberOfAdjacentBugs = 0;
-  if (y > 0 && isBug(state[y - 1][x])) {
-    numberOfAdjacentBugs += 1;
-  }
-  if (x > 0 && isBug(state[y][x - 1])) {
-    numberOfAdjacentBugs += 1;
-  }
-  if (x < 4 && isBug(state[y][x + 1])) {
-    numberOfAdjacentBugs += 1;
-  }
-  if (y < 4 && isBug(state[y + 1][x])) {
-    numberOfAdjacentBugs += 1;
-  }
+const neighbors = (x, y) => [
+  { x: x - 1, y },
+  { x: x + 1, y },
+  { x, y: y - 1 },
+  { x, y: y + 1 },
+];
 
-  return isBug(cell) ? numberOfAdjacentBugs === 1 : numberOfAdjacentBugs === 1 || numberOfAdjacentBugs === 2;
+const becomesBug = (cell, state, x, y) => {
+  const numberOfAdjacentBugs = neighbors(x, y).filter(({ x, y }) => state[y] && state[y][x] === '#').length;
+  return isBug(cell) ? numberOfAdjacentBugs === 1 : [1, 2].includes(numberOfAdjacentBugs);
 };
 
 const calculateStep = (state) => state.reduce((accY, row, y) => {
@@ -43,14 +37,14 @@ const calculateSteps = (state, numberOfSteps) => {
 
 const findDuplicateState = (state) => {
   let found = false;
-  const hashes = new Set();
+  const history = new Set();
   while (!found) {
     state = calculateStep(state);
     const hash = String(state);
-    if (hashes.has(hash)) {
+    if (history.has(hash)) {
       found = true;
     } else {
-      hashes.add(hash);
+      history.add(hash);
     }
   }
   return state;
