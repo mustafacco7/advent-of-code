@@ -1,4 +1,4 @@
-#!/usr/bin/env/node
+#!/usr/bin/env node
 const { getRow } = require('../../utils');
 const { run } = require('../intcode/intcode');
 

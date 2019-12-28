@@ -1,4 +1,4 @@
-#!/usr/bin/env/node
+#!/usr/bin/env node
 
 const getNumbers = (i) => (`${i}`).split('').map(n => Number(n));
 

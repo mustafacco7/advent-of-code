@@ -1,4 +1,4 @@
-#!/usr/bin/env/node
+#!/usr/bin/env node
 
 const { clone } = require('../../utils');
 const { getRows } = require('../../utils');
