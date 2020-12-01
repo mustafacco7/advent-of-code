@@ -18,7 +18,6 @@ const getChecksum = () => {
   return checkSum;
 };
 
-
 const sumMetadata = (tree, index, count) => tree.slice(index, index + count).reduce((sum, entry) => sum + entry);
 
 const processNode = (tree, index) => {
@@ -55,7 +54,6 @@ const findChecksum = (input) => {
   initializeListData(input);
   return getChecksum();
 };
-
 
 const findRootNodeValue = (input) => {
   const tree = input.split(' ').map(v => parseInt(v, 10));

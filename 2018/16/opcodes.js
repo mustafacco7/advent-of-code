@@ -38,7 +38,6 @@ const applyOp = (op, reg, a, b, c) => {
 
 const isEqual = (a, b) => a.join(',') === b.join(',');
 
-
 const calculate = (input) => {
   let atLeastThree = 0;
   while (input.length) {
@@ -63,7 +62,6 @@ const calculate = (input) => {
   return atLeastThree;
 };
 
-
 const getOperations = (input) => {
   let opCandidates = Object.keys(ops).reduce((res, op) => {
     res[op] = [];
@@ -79,6 +77,7 @@ const getOperations = (input) => {
       const registryBefore = getRegistryBefore(before);
       const [instruction, a, b, c] = getInstructions(inst);
       const registryAfter = getRegistryAfter(after);
+      // eslint-disable-next-line no-loop-func
       Object.entries(ops).forEach(([name, op]) => {
         const registry = applyOp(op, registryBefore, a, b, c);
         if (isEqual(registry, registryAfter)) {
@@ -94,6 +93,7 @@ const getOperations = (input) => {
   const opCodes = {};
 
   while (foundInstructions < 16) {
+    // eslint-disable-next-line no-loop-func
     Object.entries(opCandidates).forEach(([name, candidates]) => {
       if (candidates.length === 1) {
         const foundNum = candidates[0];
@@ -122,6 +122,5 @@ const calculatePart2 = (input) => {
   }
   return registers[0];
 };
-
 
 module.exports = { calculate, calculatePart2 };

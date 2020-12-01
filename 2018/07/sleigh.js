@@ -57,7 +57,6 @@ const getCandidates = (instructions, result) => Object.entries(instructions).red
   return candidates;
 }, []);
 
-
 const findTime = (input, numberOfWorkers = 5, stepTimeDiff = 0) => {
   const instructions = getInstructionsPart2(input);
   const numberOfInstructions = Object.keys(instructions).length;

@@ -30,7 +30,6 @@ const getNumberOfTypeForNeighbours = (neighbours, type) => Object.entries(neighb
   return sum;
 }, 0);
 
-
 const getNewCell = (cell, neighbours) => {
   const transitions = {
     '.': neighbours => getNumberOfTypeForNeighbours(neighbours, '|') > 2 ? '|' : '.',
@@ -46,7 +45,6 @@ const getNewCell = (cell, neighbours) => {
 
   return transitions[cell](neighbours);
 };
-
 
 const getNumberOfTypeForGrid = (grid, type) => grid.reduce((sum, row) => {
   row.forEach((cell) => {
@@ -85,6 +83,5 @@ const calculateLumber = (rows, numberOfMinutes = 10) => {
   const lumberYards = getNumberOfTypeForGrid(grid, '#');
   return trees * lumberYards;
 };
-
 
 module.exports = { calculateLumber };

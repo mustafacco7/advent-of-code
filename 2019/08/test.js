@@ -1,4 +1,3 @@
-
 const { getChecksum, getImageData, renderImage } = require('./solve');
 
 describe('Day 8', () => {

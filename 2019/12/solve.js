@@ -93,6 +93,7 @@ const solve1 = () => {
 
 const solve2 = () => {
   getRows()
+    // eslint-disable-next-line no-unused-vars
     .then((rows) => {
       /* const moons = parseMoonsFromInput(rows);
       let newState = calculateNewState(clone(moons));

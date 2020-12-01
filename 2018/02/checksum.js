@@ -1,4 +1,3 @@
-
 const checksum = (data) => {
   const values = data.map(datum => [
     ...new Set(datum
@@ -17,7 +16,6 @@ const checksum = (data) => {
 
   return Object.values(values).reduce((acc, value) => (acc * value), 1);
 };
-
 
 const findMatchingId = (data) => {
   let matchingLetters = '';

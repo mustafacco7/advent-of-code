@@ -20,7 +20,6 @@ const getCarts = grid => grid.reduce((carts, row, y) => {
   return carts;
 }, []);
 
-
 const getNextTurn = nextTurn => ((nextTurn + 1) % 3);
 const sortCarts = carts => carts.sort((cart1, cart2) => cart1.y - cart2.y || cart1.x - cart2.x);
 

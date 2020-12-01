@@ -43,5 +43,4 @@ const findMaxSquare = (gridSerial, minSquareSize = 3, maxSquareSize = 3) => {
 
 const findReallyMaxSquare = gridSerial => findMaxSquare(gridSerial, 1, 300);
 
-
 module.exports = { calculatePowerLevel, findMaxSquare, findReallyMaxSquare };

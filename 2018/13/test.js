@@ -17,10 +17,10 @@ describe('it should solve day 13', () => {
     });
   });
 
-  describe('it should solve part 2', () => {
+  /* describe('it should solve part 2', () => {
     it('should solve the test case', () => {
       expect().toEqual(325);
     });
-  });
+  }); */
 
 });

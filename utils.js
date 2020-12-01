@@ -5,7 +5,6 @@ const envPath = require('find-config')('.env');
 // dotenv is trying to read .env from the path which calls utils.js, so the path is NOT relative to utils.js
 require('dotenv').config({ path: envPath });
 
-
 /**
  * Try to figure out the date to use
  * @returns {*[]}
@@ -35,7 +34,6 @@ const guessDate = () => {
 
   return [year, day];
 };
-
 
 const getRemoteData = ({ year, day } = {}) => {
   if (!year && !day) {

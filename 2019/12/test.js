@@ -20,7 +20,6 @@ describe('Day 12', () => {
       ];
     });
 
-
     test('it should calculate correct velocities after step 1', () => {
       velocities = calculateVelocities(moons);
       expect(velocities).toEqual([
@@ -112,7 +111,6 @@ describe('Day 12', () => {
     test('it should find an equal state', () => {
       expect(isSameState(initialState, initialState)).toBeTruthy();
     });
-
 
     test('it should not find the same state after 100 steps for example 1', () => {
       const finalState = calculateNewState(initialState, 102);

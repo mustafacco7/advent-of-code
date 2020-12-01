@@ -4,4 +4,4 @@ node_modules
 advent-of-code.iml
 .idea
 yarn-error.log
-
+.history

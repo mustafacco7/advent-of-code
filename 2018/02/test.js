@@ -13,7 +13,6 @@ test('it should solve part 1 test cases', () => {
   expect(checksum(input)).toEqual(12);
 });
 
-
 test('it should solve part 2 test cases', () => {
   const input = [
     'abcde',

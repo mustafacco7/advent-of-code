@@ -5,7 +5,6 @@ const input = 9445;
 describe('it should solve day 11', () => {
   describe('it should solve part 1', () => {
 
-
     test('it should calculate the powerLevel', () => {
       expect(calculatePowerLevel([3, 5], 8)).toEqual(4);
       expect(calculatePowerLevel([122, 79], 57)).toEqual(-5);

@@ -2,24 +2,22 @@
 
 const { getRows } = require('../../utils');
 
-const parseInput = (rows) => {
-  return rows.map(row => {
-    let instruction;
-    let number;
+const parseInput = (rows) => rows.map(row => {
+  let instruction;
+  let number;
 
-    if (row.startsWith('cut')) {
-      instruction = 'cut';
-      [, number] = row.match(/cut (-?\d+)/);
-    } else if (row.startsWith('deal with')) {
-      instruction = 'dealWithIncrement';
-      [, number] = row.match(/deal with increment (\d+)/);
-    } else {
-      instruction = 'dealIntoNewStack';
-    }
+  if (row.startsWith('cut')) {
+    instruction = 'cut';
+    [, number] = row.match(/cut (-?\d+)/);
+  } else if (row.startsWith('deal with')) {
+    instruction = 'dealWithIncrement';
+    [, number] = row.match(/deal with increment (\d+)/);
+  } else {
+    instruction = 'dealIntoNewStack';
+  }
 
-    return [instruction, Number(number)];
-  });
-};
+  return [instruction, Number(number)];
+});
 
 const dealIntoNewStack = (deck) => deck.reverse();
 
@@ -49,7 +47,6 @@ const methods = {
   dealIntoNewStack,
   dealWithIncrement,
 };
-
 
 const shuffle = (deck, instructions) => {
   instructions.forEach(([method, number]) => {

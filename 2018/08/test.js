@@ -1,4 +1,3 @@
-
 const { findChecksum, findRootNodeValue } = require('./checksum');
 
 describe('it should solve part 1 and part 2', () => {

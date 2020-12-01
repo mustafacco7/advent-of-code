@@ -12,7 +12,7 @@ const getChecksum = ({ digits, width = 25, height = 6 }) => {
   return getItemCount(layer, '1') * getItemCount(layer, '2');
 };
 
-const getImageData = ({ digits, width = 25, height = 6}) => {
+const getImageData = ({ digits, width = 25, height = 6 }) => {
   let layers = [];
   while (digits.length) {
     let layer = [];
@@ -24,7 +24,6 @@ const getImageData = ({ digits, width = 25, height = 6}) => {
   }
   return { layers };
 };
-
 
 const getPixel = ({ layers, layer, row, column }) => {
   const pixel = layers[layer][row][column];

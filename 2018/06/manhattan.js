@@ -15,7 +15,6 @@ const findCorners = coordinatesList => coordinatesList.reduce((corners, [x, y]) 
   };
 }, { x1: Number.MAX_VALUE, y1: Number.MAX_VALUE, x2: -1, y2: -1 });
 
-
 const findLargestArea = (rows) => {
   const minDistances = {};
   const coordinates = getCoordinates(rows);

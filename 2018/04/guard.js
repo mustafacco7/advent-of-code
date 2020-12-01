@@ -7,7 +7,6 @@ const findMaxMinute = minutes => Object.entries(minutes).reduce((max, [minute, c
   return max;
 }, { count: -1 });
 
-
 const calculateValues = (rows) => {
   const regexp = /\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\] (?:Guard #(\d+) begins shift|(falls|wakes))/;
   let currentId;

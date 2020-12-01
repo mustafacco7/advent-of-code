@@ -1,4 +1,3 @@
-
 const { sum, findDuplicates } = require('./sum');
 
 test('it should solve part 1 test cases', () => {
@@ -7,7 +6,6 @@ test('it should solve part 1 test cases', () => {
   expect(sum([+1, +1, -2])).toEqual(0);
   expect(sum([-1, -2, -3])).toEqual(-6);
 });
-
 
 test('it should solve part 2 test cases', () => {
   expect(findDuplicates([+1, -2, +3, +1])).toEqual(2);

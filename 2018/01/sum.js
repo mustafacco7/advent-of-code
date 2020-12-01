@@ -1,9 +1,7 @@
-
 const sum = data => data.reduce((acc, datum) => {
   acc += parseInt(datum, 10);
   return acc;
 }, 0);
-
 
 const findDuplicates = (data) => {
   const frequencies = {};

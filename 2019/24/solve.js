@@ -57,7 +57,6 @@ const calculateBiodiversityRating = (state) => findDuplicateState(state)
     return sum;
   }, 0);
 
-
 const solve1 = () => {
   getRows()
     .then((rows) => {
@@ -65,6 +64,7 @@ const solve1 = () => {
     });
 };
 
+// eslint-disable-next-line no-unused-vars
 const solve2 = () => {
   getRows()
     .then((rows) => {
