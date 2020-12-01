@@ -68,6 +68,7 @@ const getData = async () => {
 
 const getRows = () => getData().then(data => data.trim().split('\n'));
 const getRow = () => getRows().then(data => data[0]);
+const getNumberRows = () => getRows().then((data) => data.map(Number));
 
 const clone = (object) => JSON.parse(JSON.stringify(object));
 const grouped = (arr, groupSize) => arr
@@ -78,4 +79,4 @@ const grouped = (arr, groupSize) => arr
   }, []);
 const minBy = cb => (a, b) => (cb(b) < cb(a) ? b : a);
 
-module.exports = { getRow, getRows, clone, grouped, minBy };
+module.exports = { getRow, getRows, getNumberRows, clone, grouped, minBy };
