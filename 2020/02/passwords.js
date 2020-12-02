@@ -1,7 +1,7 @@
 const validatePasswords = (input) => {
   const data = input.map((row) => {
     const [, minCount, maxCount, character, password] = row.split(
-      /(\d+)-(\d+) (.): (.+)/
+      /(\d+)-(\d+) (.): (.+)/,
     );
     return [minCount, maxCount, character, password];
   });
@@ -16,7 +16,7 @@ const validatePasswords = (input) => {
         numberOfWantedCharacters >= minCount &&
         numberOfWantedCharacters <= maxCount
       );
-    }
+    },
   );
   return correctPasswords.length;
 };
@@ -24,7 +24,7 @@ const validatePasswords = (input) => {
 const validatePasswords2 = (input) => {
   const data = input.map((row) => {
     const [, firstPos, lastPos, character, password] = row.split(
-      /(\d+)-(\d+) (.): (.+)/
+      /(\d+)-(\d+) (.): (.+)/,
     );
     return [firstPos, lastPos, character, password];
   });
@@ -38,7 +38,7 @@ const validatePasswords2 = (input) => {
         matches += 1;
       }
       return matches === 1;
-    }
+    },
   );
   return correctPasswords.length;
 };
