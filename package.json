@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "lint": "eslint .",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "npm run test -- --watch"
   },
   "main": "index.js",
   "author": "Hank",
