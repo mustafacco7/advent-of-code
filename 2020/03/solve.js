@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { getRows } = require('../../utils');
-const findTrees = require('./findTrees');
+const { findTrees, findMultipleTrees } = require('./findTrees');
 
 const solve1 = () => {
   getRows()
@@ -11,11 +11,11 @@ const solve1 = () => {
     .catch((err) => console.log(`There was an error\n${err}`));
 };
 
-/* const solve2 = () => {
+const solve2 = () => {
   getRows().then((rows) => {
-    console.log(`Part 2: ${validatePasswords2(rows)}`);
+    console.log(`Part 2: ${findMultipleTrees(rows)}`);
   });
-}; */
+};
 
 solve1();
-//solve2();
+solve2();
