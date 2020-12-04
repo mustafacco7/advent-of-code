@@ -73,13 +73,7 @@ const validatePassports2 = (input) => {
   const passports = getPassports(input);
   const matchingPassports = passports.map((passportRows) => {
     const passport = passportRows.join(',');
-    return requiredFields.every((requiredField) => {
-      const res = validations[requiredField](passport, requiredField);
-      if (!res && requiredField === 'pid') {
-        console.log(requiredField, passport);
-      }
-      return res;
-    });
+    return requiredFields.every((requiredField) => validations[requiredField](passport, requiredField));
   });
   return matchingPassports.filter(Boolean).length;
 };
