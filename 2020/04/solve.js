@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { getRows } = require('../../utils');
-const { validatePassports } = require('./validatePassports');
+const { validatePassports, validatePassports2 } = require('./validatePassports');
 
 const solve1 = () => {
   getRows()
@@ -11,11 +11,11 @@ const solve1 = () => {
     .catch((err) => console.log(`There was an error\n${err}`));
 };
 
-/* const solve2 = () => {
+const solve2 = () => {
   getRows().then((rows) => {
     console.log(`Part 2: ${validatePassports2(rows)}`);
   });
-}; */
+};
 
 solve1();
-// solve2();
+solve2();
