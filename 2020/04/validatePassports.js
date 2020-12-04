@@ -23,28 +23,15 @@ const minMaxNumbers = (passport, requiredField, min, max) => {
   return number && number >= min && number <= max;
 };
 
-const hasCorrectHeight = (passport) => {
-  const correctHeight = passport.match(
-    /hgt:(1([5-8]\d|9[0-3]))cm|(59|6\d|7[0-6])in/,
-  );
-  return !!correctHeight;
-};
+const hasCorrectHeight = (passport) =>
+  !!passport.match(/hgt:(1([5-8]\d|9[0-3]))cm|(59|6\d|7[0-6])in/);
 
-const hasCorrectHairColor = (passport) => {
-  const [, correctHairColor] = passport.match(/hcl:#([\da-f]){6}/) || [];
-  return !!correctHairColor;
-};
+const hasCorrectHairColor = (passport) => !!passport.match(/hcl:#([\da-f]){6}/);
 
-const hasCorrectEyeColor = (passport) => {
-  const [, correctEyeColor] =
-    passport.match(/ecl:(amb|blu|brn|gry|grn|hzl|oth)/) || [];
-  return !!correctEyeColor;
-};
+const hasCorrectEyeColor = (passport) =>
+  !!passport.match(/ecl:(amb|blu|brn|gry|grn|hzl|oth)/);
 
-const hasCorrectPid = (passport) => {
-  const [, pidString] = passport.match(/pid:(\d{9})\b/) || [];
-  return !!pidString;
-};
+const hasCorrectPid = (passport) => !!passport.match(/pid:(\d{9})\b/);
 
 const validations = {
   byr: (passport) => minMaxNumbers(passport, 'byr', 1920, 2002),
@@ -73,7 +60,9 @@ const validatePassports2 = (input) => {
   const passports = getPassports(input);
   const matchingPassports = passports.map((passportRows) => {
     const passport = passportRows.join(',');
-    return requiredFields.every((requiredField) => validations[requiredField](passport, requiredField));
+    return requiredFields.every((requiredField) =>
+      validations[requiredField](passport, requiredField),
+    );
   });
   return matchingPassports.filter(Boolean).length;
 };
