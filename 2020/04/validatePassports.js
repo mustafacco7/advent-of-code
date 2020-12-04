@@ -24,19 +24,14 @@ const minMaxNumbers = (passport, requiredField, min, max) => {
 };
 
 const hasCorrectHeight = (passport) => {
-  const heightRegexp = new RegExp('hgt:(\\d+)(cm|in)');
-  const [, height, unit] = passport.match(heightRegexp) || [];
-  if (unit === 'cm') {
-    return height >= 150 && height <= 193;
-  }
-  if (unit === 'in') {
-    return height >= 59 && height <= 76;
-  }
-  return false;
+  const correctHeight = passport.match(
+    /hgt:(1(5\d|[6-8]\d|9[0-3]))cm|(59|6\d|7[0-6])in/,
+  );
+  return !!correctHeight;
 };
 
 const hasCorrectHairColor = (passport) => {
-  const [, correctHairColor] = passport.match(/hcl:#([\dabcdef]){6}/) || [];
+  const [, correctHairColor] = passport.match(/hcl:#([\da-f]){6}/) || [];
   return !!correctHairColor;
 };
 
@@ -47,26 +42,18 @@ const hasCorrectEyeColor = (passport) => {
 };
 
 const hasCorrectPid = (passport) => {
-  const [, pidString] = passport.match(/pid:(\d{1,9})\b/) || [];
-  if (!Number(pidString)) {
-    return false;
-  }
-  const pid = pidString.padStart(9, '0');
-  return !!pid && pid.length === 9;
+  const [, pidString] = passport.match(/pid:(\d{9})\b/) || [];
+  return !!pidString;
 };
 
 const validations = {
-  byr: (passport) =>
-    isPresent(passport, 'byr') && minMaxNumbers(passport, 'byr', 1920, 2002),
-  iyr: (passport) =>
-    isPresent(passport, 'iyr') && minMaxNumbers(passport, 'iyr', 2010, 2020),
-  eyr: (passport) =>
-    isPresent(passport, 'eyr') && minMaxNumbers(passport, 'eyr', 2020, 2030),
-  hgt: (passport) => isPresent(passport, 'hgt') && hasCorrectHeight(passport),
-  hcl: (passport) =>
-    isPresent(passport, 'hcl') && hasCorrectHairColor(passport),
-  ecl: (passport) => isPresent(passport, 'ecl') && hasCorrectEyeColor(passport),
-  pid: (passport) => isPresent(passport, 'pid') && hasCorrectPid(passport),
+  byr: (passport) => minMaxNumbers(passport, 'byr', 1920, 2002),
+  iyr: (passport) => minMaxNumbers(passport, 'iyr', 2010, 2020),
+  eyr: (passport) => minMaxNumbers(passport, 'eyr', 2020, 2030),
+  hgt: (passport) => hasCorrectHeight(passport),
+  hcl: (passport) => hasCorrectHairColor(passport),
+  ecl: (passport) => hasCorrectEyeColor(passport),
+  pid: (passport) => hasCorrectPid(passport),
 };
 
 const validatePassports = (input) => {

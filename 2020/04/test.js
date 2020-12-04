@@ -113,14 +113,7 @@ describe('it should solve part 1 and part 2', () => {
         'hcl:123abc ecl:amb hgt:170 pid:021572410,iyr:2018 byr:1926',
       ),
     ).toEqual(true);
-    expect(
-      hasCorrectPid('hcl:123abc ecl:amb hgt:170 pid:0215724,iyr:2018 byr:1926'),
-    ).toEqual(true);
-    expect(
-      hasCorrectPid('hcl:123abc ecl:amb hgt:170 pid:0215724 iyr:2018 byr:1926'),
-    ).toEqual(true);
     expect(hasCorrectPid('pid:093154719')).toEqual(true);
-    expect(hasCorrectPid('pid:093154')).toEqual(true);
     expect(hasCorrectPid('pid:09315471912')).toEqual(false);
   });
 
