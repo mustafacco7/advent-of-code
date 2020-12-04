@@ -25,7 +25,7 @@ const minMaxNumbers = (passport, requiredField, min, max) => {
 
 const hasCorrectHeight = (passport) => {
   const correctHeight = passport.match(
-    /hgt:(1(5\d|[6-8]\d|9[0-3]))cm|(59|6\d|7[0-6])in/,
+    /hgt:(1([5-8]\d|9[0-3]))cm|(59|6\d|7[0-6])in/,
   );
   return !!correctHeight;
 };
