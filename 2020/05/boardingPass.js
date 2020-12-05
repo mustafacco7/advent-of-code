@@ -15,10 +15,18 @@ const findHighestSeatId = (input) => {
   return seatIds[seatIds.length - 1];
 };
 
-const findMySeatId = (input) =>
-  getAllSetIds(input).find(
-    (seat, index, seats) => seats[index + 1] !== seat + 1,
-  ) + 1;
+const findMySeatId = (input) => {
+  const seatIds = getAllSetIds(input);
+  // Get the lowest and highest seatId so we can build a new array from those values
+  const [minSeatId, maxSeatId] = [Math.min(...seatIds), Math.max(...seatIds)];
+  return Array.from(
+    // Create an array of the length of the number of availbale seatIds
+    Array(maxSeatId - minSeatId),
+    // Fill it with values from the lowest seatId and up (eg. not 0 - X)
+    (_, index) => index + minSeatId,
+    // And find the seatId that is not in the original list of seatIds
+  ).find((seatId) => !seatIds.includes(seatId));
+};
 
 module.exports = {
   decodeBoardinPass,
