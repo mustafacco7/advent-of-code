@@ -14,7 +14,18 @@ const findHighestSeatId = (input) =>
     return high;
   }, 0);
 
+const findMySeatId = (input) => {
+  const seatIds = input
+    .map((boardingPass) => decodeBoardinPass(boardingPass).seatId)
+    .sort((a, b) => Number(a) - Number(b));
+
+  return (
+    seatIds.find((seat, index, seats) => seats[index + 1] !== seat + 1) + 1
+  );
+};
+
 module.exports = {
   decodeBoardinPass,
   findHighestSeatId,
+  findMySeatId,
 };
