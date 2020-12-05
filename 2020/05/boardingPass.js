@@ -5,24 +5,20 @@ const decodeBoardinPass = (boardingPass) => {
   return { row, column, seatId: row * 8 + column };
 };
 
-const findHighestSeatId = (input) =>
-  input.reduce((high, boardingPass) => {
-    const { seatId } = decodeBoardinPass(boardingPass);
-    if (seatId > high) {
-      high = seatId;
-    }
-    return high;
-  }, 0);
-
-const findMySeatId = (input) => {
-  const seatIds = input
+const getAllSetIds = (input) =>
+  input
     .map((boardingPass) => decodeBoardinPass(boardingPass).seatId)
     .sort((a, b) => Number(a) - Number(b));
 
-  return (
-    seatIds.find((seat, index, seats) => seats[index + 1] !== seat + 1) + 1
-  );
+const findHighestSeatId = (input) => {
+  const seatIds = getAllSetIds(input);
+  return seatIds[seatIds.length - 1];
 };
+
+const findMySeatId = (input) =>
+  getAllSetIds(input).find(
+    (seat, index, seats) => seats[index + 1] !== seat + 1,
+  ) + 1;
 
 module.exports = {
   decodeBoardinPass,
