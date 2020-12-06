@@ -1,18 +1,7 @@
-const getGroupedAnswers = (input) =>
-  input.reduce(
-    (acc, row) => {
-      if (row) {
-        acc[acc.length - 1].push(row);
-      } else {
-        acc.push([]);
-      }
-      return acc;
-    },
-    [[]],
-  );
+const { groupRows } = require('../../utils');
 
 const getUniqueAnswers = (input) =>
-  getGroupedAnswers(input).map((row) => [...new Set(row.join(''))]);
+  groupRows(input).map((row) => [...new Set(row.join(''))]);
 
 const util1 = (input) => {
   const totalAnswers = getUniqueAnswers(input).reduce((sum, groupAnswers) => {
@@ -23,7 +12,7 @@ const util1 = (input) => {
 };
 
 const util2 = (input) => {
-  const groups = getGroupedAnswers(input);
+  const groups = groupRows(input);
   const groupMembers = groups.map((group) => group.length);
   const sum = groups.reduce((validAnswersCount, group, i) => {
     if (groupMembers[i] === 1) {
@@ -33,17 +22,22 @@ const util2 = (input) => {
 
     const groupAnswersCount = group.reduce((answersCount, member) => {
       member.split('').forEach((answer) => {
-        answersCount[answer] = answersCount[answer] ? (answersCount[answer] += 1) : 1;
+        answersCount[answer] = answersCount[answer]
+          ? (answersCount[answer] += 1)
+          : 1;
       });
       return answersCount;
     }, {});
 
-    validAnswersCount += Object.values(groupAnswersCount).reduce((total, answers) => {
-      if (answers >= groupMembers[i]) {
-        total += 1;
-      }
-      return total;
-    }, 0);
+    validAnswersCount += Object.values(groupAnswersCount).reduce(
+      (total, answers) => {
+        if (answers >= groupMembers[i]) {
+          total += 1;
+        }
+        return total;
+      },
+      0,
+    );
 
     return validAnswersCount;
   }, 0);

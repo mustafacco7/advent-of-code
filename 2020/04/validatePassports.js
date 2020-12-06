@@ -1,15 +1,4 @@
-const getPassports = (input) =>
-  input.reduce(
-    (acc, row) => {
-      if (row) {
-        acc[acc.length - 1].push(row);
-      } else {
-        acc.push([]);
-      }
-      return acc;
-    },
-    [[]],
-  );
+const { groupRows } = require('../../utils');
 
 const isPresent = (passport, requiredField) => {
   const presentRegexp = new RegExp(`${requiredField}:`, 'g');
@@ -45,7 +34,7 @@ const validations = {
 
 const validatePassports = (input) => {
   const requiredFields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'];
-  const passports = getPassports(input);
+  const passports = groupRows(input);
   const matchingPassports = passports.map((passportRows) => {
     const passport = passportRows.join(',');
     return requiredFields.every((requiredField) =>
@@ -57,7 +46,7 @@ const validatePassports = (input) => {
 
 const validatePassports2 = (input) => {
   const requiredFields = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'];
-  const passports = getPassports(input);
+  const passports = groupRows(input);
   const matchingPassports = passports.map((passportRows) => {
     const passport = passportRows.join(',');
     return requiredFields.every((requiredField) =>

@@ -50,8 +50,7 @@ const getRemoteData = ({ year, day } = {}) => {
     cookie: `session=${session}`,
   };
 
-  return fetch(url, { headers })
-    .then(res => res.text());
+  return fetch(url, { headers }).then((res) => res.text());
 };
 
 const getData = async () => {
@@ -66,17 +65,34 @@ const getData = async () => {
   }
 };
 
-const getRows = () => getData().then(data => data.trim().split('\n'));
-const getRow = () => getRows().then(data => data[0]);
+const getRows = () => getData().then((data) => data.trim().split('\n'));
+const getRow = () => getRows().then((data) => data[0]);
 const getNumberRows = () => getRows().then((data) => data.map(Number));
 
 const clone = (object) => JSON.parse(JSON.stringify(object));
-const grouped = (arr, groupSize) => arr
-  .reduce((acc, item, index) => {
+const grouped = (arr, groupSize) =>
+  arr.reduce((acc, item, index) => {
     // eslint-disable-next-line no-unused-expressions
-    (index % groupSize === 0) ? acc.push([item]) : acc[acc.length - 1].push(item);
+    index % groupSize === 0 ? acc.push([item]) : acc[acc.length - 1].push(item);
     return acc;
   }, []);
-const minBy = cb => (a, b) => (cb(b) < cb(a) ? b : a);
+const minBy = (cb) => (a, b) => (cb(b) < cb(a) ? b : a);
+const groupRows = (rows) =>
+  rows.reduce(
+    (acc, row) => {
+      // eslint-disable-next-line no-unused-expressions
+      row ? acc[acc.length - 1].push(row) : acc.push([]);
+      return acc;
+    },
+    [[]],
+  );
 
-module.exports = { getRow, getRows, getNumberRows, clone, grouped, minBy };
+module.exports = {
+  getRow,
+  getRows,
+  getNumberRows,
+  clone,
+  grouped,
+  minBy,
+  groupRows,
+};
