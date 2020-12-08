@@ -15,7 +15,6 @@ const computer = {
 };
 
 const parseInstructions = (rows) => {
-  console.log('row', rows);
   const instructions = rows.map((row) => {
     const [, op, value] = row.match(/(acc|jmp|nop) ([+-]\d+)/);
     return { op, value: Number(value) };
@@ -30,7 +29,6 @@ const util1 = (input) => {
   const instructions = parseInstructions(input);
   while (!visited[pointer]) {
     const { op, value } = instructions[pointer];
-    console.log(op, value);
     visited[pointer] = true;
     const result = computer[op]({ pointer, value, acc });
     acc = result.acc;

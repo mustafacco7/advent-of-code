@@ -17,7 +17,7 @@ describe('it should solve part 1 and part 2', () => {
     expect(util1(input1)).toEqual(5);
   });
 
-  /* test('it should solve example 2', () => {
-    expect(util2(input1)).toEqual(0);
+ /*  test('it should solve example 2', () => {
+    expect(util2(input1)).toEqual(8);
   }); */
 });
