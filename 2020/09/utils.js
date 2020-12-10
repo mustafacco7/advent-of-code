@@ -53,23 +53,19 @@ const util2 = (input, preamble) => {
   const invalidNumber = findInvalidNumber([...input], preamble);
   let sequence = [];
   let found = false;
-  for (let i = 0; i < input.length; i += 1) {
-    sequence = [input[i]];
-    for (let j = i + 1; j < input.length; j += 1) {
-      sequence.push(input[j]);
+  input.some((a, i) => {
+    sequence = [a];
+    input.slice(i + 1).some((b) => {
+      sequence.push(b);
       const sum = sumOfArray(sequence);
       if (sum === invalidNumber) {
         found = true;
-        break;
+        return true;
       }
-      if (sum > invalidNumber) {
-        break;
-      }
-    }
-    if (found) {
-      break;
-    }
-  }
+      return sum > invalidNumber;
+    });
+    return found;
+  });
 
   return minInArray(sequence) + maxInArray(sequence);
 };
