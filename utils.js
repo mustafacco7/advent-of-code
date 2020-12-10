@@ -87,6 +87,9 @@ const groupRows = (rows) =>
     [[]],
   );
 
+const minInArray = (arr) => Math.min(...arr);
+const maxInArray = (arr) => Math.max(...arr);
+
 module.exports = {
   getRow,
   getRows,
@@ -94,5 +97,7 @@ module.exports = {
   clone,
   grouped,
   minBy,
+  minInArray,
+  maxInArray,
   groupRows,
 };

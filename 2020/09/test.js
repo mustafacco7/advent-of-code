@@ -92,9 +92,9 @@ describe('it should solve part 1 and part 2', () => {
     expect(calculate(input2, 25, 66)).toBe(true);
   });
 
-  expect(util1(input3, 5)).toBe(127);
+  expect(util1([...input3], 5)).toBe(127);
 
-  // test('it should solve example 2', () => {
-  // expect(util2(input1)).toEqual(0);
-  // });
+  test('it should solve example 2', () => {
+    expect(util2([...input3], 5)).toEqual(62);
+  });
 });

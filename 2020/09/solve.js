@@ -13,9 +13,9 @@ const solve1 = () => {
 
 const solve2 = () => {
   getNumberRows().then((rows) => {
-    console.log(`Part 2: ${util2(rows)}`);
+    console.log(`Part 2: ${util2(rows, 25)}`);
   });
 };
 
 solve1();
-// solve2();
+solve2();
