@@ -70,6 +70,10 @@ const getNumberOfOccupiedSeats = (seats) =>
     return total;
   }, 0);
 
+const getVisibleSeats = (seats, x, y) => {
+
+};
+
 const util1 = (input) => {
   let numberOfOccuppiedSeats;
   let previousState = input;
@@ -96,5 +100,6 @@ module.exports = {
   calculateNextStateForSeat,
   getAdjacentSeats,
   getOccupiedAdjacentSeats,
+  getVisibleSeats,
   isEqualSeats,
 };
