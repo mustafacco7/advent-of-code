@@ -18,4 +18,4 @@ const solve2 = () => {
 };
 
 solve1();
-solve2();
+// solve2();

@@ -29,21 +29,61 @@ const getOccupiedAdjacentSeats = (seats, x, y) =>
     return sum;
   }, 0);
 
-const applyRules = (seats) => {
-  const width = seats[0].length;
-  const height = seats.length;
-  const position = { x: 0, y: 0 };
-  console.log(getAdjacentSeats(seats, 0, 0));
-  while (position.y < height) {
-    const x = position.x % width;
-    const { y } = position;
-    const adjacentSeats = getAdjacentSeats(seats, x, y);
+const calculateNextStateForSeat = (seats, x, y) => {
+  const seat = seats[y][x];
+  const occupiedAdjacentSeats = getOccupiedAdjacentSeats(seats, x, y);
+
+  if (seat === 'L' && !occupiedAdjacentSeats) {
+    return '#';
   }
+
+  if (seat === '#' && occupiedAdjacentSeats >= 4) {
+    return 'L';
+  }
+
+  return seat;
 };
 
+const calculateNextState = (seats) => {
+  const newSeats = [];
+  seats.forEach((seatRows, y) => {
+    let row = '';
+    seatRows.split('').forEach((seat, x) => {
+      const newSeat = calculateNextStateForSeat(seats, x, y);
+      row += newSeat;
+    });
+    newSeats.push(row);
+  });
+
+  return newSeats;
+};
+
+const isEqualSeats = (seats1, seats2) =>
+  JSON.stringify(seats1) === JSON.stringify(seats2);
+
+const getNumberOfOccupiedSeats = (seats) =>
+  seats.reduce((total, row) => {
+    total += row.split('').reduce((sum, seat) => {
+      if (seat === '#') {
+        sum += 1;
+      }
+      return sum;
+    }, 0);
+    return total;
+  }, 0);
+
 const util1 = (input) => {
-  console.log(input);
-  return input;
+  let previousState = input;
+  let found = false;
+  while (!found) {
+    const nextState = calculateNextState(previousState);
+    if (isEqualSeats(nextState, previousState)) {
+      found = true;
+    }
+    previousState = nextState;
+  }
+
+  return getNumberOfOccupiedSeats(previousState);
 };
 
 const util2 = (input) => {
@@ -51,4 +91,12 @@ const util2 = (input) => {
   return input;
 };
 
-module.exports = { util1, util2, getAdjacentSeats, getOccupiedAdjacentSeats };
+module.exports = {
+  util1,
+  util2,
+  calculateNextState,
+  calculateNextStateForSeat,
+  getAdjacentSeats,
+  getOccupiedAdjacentSeats,
+  isEqualSeats,
+};
