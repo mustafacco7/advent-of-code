@@ -1,24 +1,25 @@
-/* eslint-disable no-continue */
+const tripple = Array(3)
+  .fill(1)
+  .map((_, i) => i - 1);
+
 const getAdjacentSeats = (seats, x, y) => {
   const width = seats[0].length;
   const height = seats.length;
-  const adjacentSeats = [];
 
-  for (let posY = y - 1; posY <= y + 1; posY += 1) {
-    if (posY < 0 || posY === height) {
-      continue;
+  return tripple.reduce((adjacentSeats, dy) => {
+    const posY = y + dy;
+    if (posY >= 0 && posY < height) {
+      tripple.forEach((dx) => {
+        const posX = x + dx;
+        if (posX >= 0 && posX < width && !(posX === x && posY === y)) {
+          if (seats[posY][posX] !== '.') {
+            adjacentSeats.push(seats[posY][posX]);
+          }
+        }
+      });
     }
-    for (let posX = x - 1; posX <= x + 1; posX += 1) {
-      if (posX < 0 || (posX === x && posY === y) || posX === width) {
-        continue;
-      }
-      if (seats[posY][posX] !== '.') {
-        adjacentSeats.push(seats[posY][posX]);
-      }
-    }
-  }
-
-  return adjacentSeats;
+    return adjacentSeats;
+  }, []);
 };
 
 const getOccupiedAdjacentSeats = (seats, x, y) =>
@@ -44,19 +45,16 @@ const calculateNextStateForSeat = (seats, x, y) => {
   return seat;
 };
 
-const calculateNextState = (seats) => {
-  const newSeats = [];
-  seats.forEach((seatRows, y) => {
+const calculateNextState = (seats) =>
+  seats.reduce((newSeats, seatRows, y) => {
     let row = '';
     seatRows.split('').forEach((seat, x) => {
       const newSeat = calculateNextStateForSeat(seats, x, y);
       row += newSeat;
     });
     newSeats.push(row);
-  });
-
-  return newSeats;
-};
+    return newSeats;
+  }, []);
 
 const isEqualSeats = (seats1, seats2) =>
   JSON.stringify(seats1) === JSON.stringify(seats2);
@@ -73,17 +71,17 @@ const getNumberOfOccupiedSeats = (seats) =>
   }, 0);
 
 const util1 = (input) => {
+  let numberOfOccuppiedSeats;
   let previousState = input;
-  let found = false;
-  while (!found) {
+  while (!numberOfOccuppiedSeats) {
     const nextState = calculateNextState(previousState);
     if (isEqualSeats(nextState, previousState)) {
-      found = true;
+      numberOfOccuppiedSeats = getNumberOfOccupiedSeats(previousState);
+    } else {
+      previousState = nextState;
     }
-    previousState = nextState;
   }
-
-  return getNumberOfOccupiedSeats(previousState);
+  return numberOfOccuppiedSeats;
 };
 
 const util2 = (input) => {
