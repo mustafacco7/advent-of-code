@@ -1,5 +1,6 @@
 const {
   rotationToCompassDirection,
+  rotations,
   updateRotation,
   util1,
   util2,
@@ -28,11 +29,21 @@ describe('it should solve part 1 and part 2', () => {
     expect(updateRotation(90, -180)).toEqual(270);
     expect(updateRotation(180, 180)).toEqual(0);
   });
+
+  test('it should rotate waypoint correctly', () => {
+    expect(rotations[0]({ waypoint: { x: 1, y: 3 } })).toEqual({ waypoint: { x: 1, y: 3 } });
+    expect(rotations[1]({ waypoint: { x: 1, y: 3 } })).toEqual({ waypoint: { x: 3, y: -1 } });
+    expect(rotations[2]({ waypoint: { x: 1, y: 3 } })).toEqual({ waypoint: { x: -1, y: -3 } });
+    expect(rotations[3]({ waypoint: { x: 1, y: 3 } })).toEqual({ waypoint: { x: 3, y: 1 } });
+    expect(rotations[1]({ waypoint: { x: 10, y: 4 } })).toEqual({ waypoint: { x: 4, y: -10 } });
+    expect(rotations[2]({ waypoint: { x: 10, y: 4 } })).toEqual({ waypoint: { x: -10, y: -4 } });
+    expect(rotations[3]({ waypoint: { x: 10, y: 4 } })).toEqual({ waypoint: { x: 4, y: 10 } });
+  });
   test('it should solve example 1', () => {
     expect(util1(input1)).toEqual(25);
   });
 
-  /* test('it should solve example 2', () => {
-    expect(util2(input1)).toEqual(0);
-  }); */
+  test('it should solve example 2', () => {
+    expect(util2(input1)).toEqual(286);
+  });
 });
