@@ -47,7 +47,6 @@ const instructions = {
 const util1 = (input) => {
   const location = input.reduce(
     ({ x, y, rotation }, instruction) => {
-      console.log('instruction', instruction);
       const [, letter, number] = instruction.match(/([NSEWLRF])(\d+)/) || [];
       return instructions[letter](number, { x, y, rotation });
     },
@@ -57,7 +56,6 @@ const util1 = (input) => {
       rotation: 90,
     },
   );
-  console.log(location);
   return Math.abs(location.x) + Math.abs(location.y);
 };
 
