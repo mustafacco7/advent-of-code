@@ -112,7 +112,7 @@ const util1 = (input) => {
 };
 
 const util2 = (input) => {
-  const { ship, waypoint } = input.reduce(
+  const { ship } = input.reduce(
     ({ ship, waypoint }, instruction) => {
       const [, letter, number] = instruction.match(/([NSEWLRF])(\d+)/) || [];
       return instructions2[letter](Number(number), { ship, waypoint });
