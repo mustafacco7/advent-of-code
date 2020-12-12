@@ -58,7 +58,7 @@ const rotations = {
   },
   3: ({ ship, waypoint }) => {
     const { x, y } = waypoint;
-    waypoint.x = y;
+    waypoint.x = -y;
     waypoint.y = x;
     return { ship, waypoint };
   },
@@ -115,7 +115,6 @@ const util2 = (input) => {
   const { ship, waypoint } = input.reduce(
     ({ ship, waypoint }, instruction) => {
       const [, letter, number] = instruction.match(/([NSEWLRF])(\d+)/) || [];
-      console.log(letter, number, ship, waypoint);
       return instructions2[letter](Number(number), { ship, waypoint });
     },
     {
@@ -129,7 +128,6 @@ const util2 = (input) => {
       },
     },
   );
-  console.log({ ship, waypoint });
   return manhattanDistance(ship);
 };
 
