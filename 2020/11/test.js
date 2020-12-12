@@ -4,7 +4,8 @@ const {
   calculateNextState,
   calculateNextStateForSeat,
   getAdjacentSeats,
-  getOccupiedAdjacentSeats,
+  getNumberOfOccupiedAdjacentSeats,
+  getNumberofVisibleOccupiedSeat,
   isEqualSeats,
 } = require('./utils');
 
@@ -74,19 +75,41 @@ describe('it should solve part 1 and part 2', () => {
     '#.#L#L#.##',
   ];
 
+  const input6 = [
+    '.......#.',
+    '...#.....',
+    '.#.......',
+    '.........',
+    '..#L....#',
+    '....#....',
+    '.........',
+    '#........',
+    '...#.....',
+  ];
+
+  const input7 = [
+    '.##.##.',
+    '#.#.#.#',
+    '##...##',
+    '...L...',
+    '##...##',
+    '#.#.#.#',
+    '.##.##.',
+  ];
+
   test('it should calculate adjacent seats', () => {
     expect(getAdjacentSeats(input1, 0, 0).length).toEqual(2);
     expect(getAdjacentSeats(input1, 2, 1).length).toEqual(5);
-    expect(getOccupiedAdjacentSeats(input1, 0, 0)).toEqual(0);
-    expect(getOccupiedAdjacentSeats(input1, 2, 1)).toEqual(0);
+    expect(getNumberOfOccupiedAdjacentSeats(input1, 0, 0)).toEqual(0);
+    expect(getNumberOfOccupiedAdjacentSeats(input1, 2, 1)).toEqual(0);
   });
 
   test('it should calculate occupied adjacent seats', () => {
-    expect(getOccupiedAdjacentSeats(input2, 0, 0)).toEqual(2);
-    expect(getOccupiedAdjacentSeats(input2, 2, 1)).toEqual(5);
+    expect(getNumberOfOccupiedAdjacentSeats(input2, 0, 0)).toEqual(2);
+    expect(getNumberOfOccupiedAdjacentSeats(input2, 2, 1)).toEqual(5);
 
-    expect(getOccupiedAdjacentSeats(input4, 0, 0)).toEqual(1);
-    expect(getOccupiedAdjacentSeats(input4, 2, 1)).toEqual(4);
+    expect(getNumberOfOccupiedAdjacentSeats(input4, 0, 0)).toEqual(1);
+    expect(getNumberOfOccupiedAdjacentSeats(input4, 2, 1)).toEqual(4);
   });
 
   test('it should calculate next state for a single seat', () => {
@@ -94,9 +117,9 @@ describe('it should solve part 1 and part 2', () => {
     expect(calculateNextStateForSeat(input1, 2, 1)).toEqual('#');
     expect(calculateNextStateForSeat(input1, 3, 2)).toEqual('.');
 
-    expect(calculateNextStateForSeat(input2, 0, 0)).toEqual('#');
-    expect(calculateNextStateForSeat(input2, 2, 1)).toEqual('L');
-    expect(calculateNextStateForSeat(input2, 4, 3)).toEqual('.');
+    expect(calculateNextStateForSeat(input2, 0, 0, getNumberOfOccupiedAdjacentSeats(input2, 0, 0))).toEqual('#');
+    expect(calculateNextStateForSeat(input2, 2, 1, getNumberOfOccupiedAdjacentSeats(input2, 2, 1))).toEqual('L');
+    expect(calculateNextStateForSeat(input2, 4, 3, getNumberOfOccupiedAdjacentSeats(input2, 4, 3))).toEqual('.');
   });
 
   test('it should calculate next state for all seats', () => {
@@ -114,7 +137,12 @@ describe('it should solve part 1 and part 2', () => {
     expect(util1(input1)).toEqual(37);
   });
 
-  /*  test('it should solve example 2', () => {
-    expect(util2(input1)).toEqual(0);
-  }); */
+  test('it should get visible occupied seats', () => {
+    expect(getNumberofVisibleOccupiedSeat(input6, 3, 4)).toEqual(8);
+    expect(getNumberofVisibleOccupiedSeat(input7, 3, 3)).toEqual(0);
+  });
+
+  test('it should solve example 2', () => {
+    expect(util2(input1)).toEqual(26);
+  });
 });
