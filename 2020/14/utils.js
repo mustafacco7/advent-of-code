@@ -32,15 +32,6 @@ const applyMaskToAdress = (address, mask) =>
     })
     .join('');
 
-const getNumberOfAddresses = (mask) =>
-  2 *
-  mask.split('').reduce((sum, bit) => {
-    if (bit === 'X') {
-      sum += 1;
-    }
-    return sum;
-  }, 0);
-
 const replaceX = (addressMask) => {
   const index = addressMask.indexOf('X');
   if (index === -1) {
