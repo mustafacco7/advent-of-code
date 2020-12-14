@@ -1,13 +1,67 @@
 /* eslint-disable no-bitwise */
 
+const intToBin = (int) => (int >>> 0).toString(2).padStart(36, 0);
+
 const bitwiseAnd = (value, mask) => {
-  const bin = (value >>> 0).toString(2).padStart(36, 0);
+  const bin = intToBin(value);
   const andMask = mask.replace(/X/g, '1');
-  return andMask.split('').map((bit, index) => bin[index] & bit).join('');
+  return andMask
+    .split('')
+    .map((bit, index) => bin[index] & bit)
+    .join('');
 };
 const bitwiseOr = (bin, mask) => {
   const orMask = mask.replace(/X/g, '0');
-  return orMask.split('').map((bit, index) => bin[index] | bit).join('');
+  return orMask
+    .split('')
+    .map((bit, index) => bin[index] | bit)
+    .join('');
+};
+
+const applyMaskToAdress = (address, mask) =>
+  intToBin(address)
+    .split('')
+    .map((bit, i) => {
+      if (mask[i] === '0') {
+        return bit;
+      }
+      if (mask[i] === '1') {
+        return 1;
+      }
+      return 'X';
+    })
+    .join('');
+
+const getNumberOfAddresses = (mask) =>
+  2 *
+  mask.split('').reduce((sum, bit) => {
+    if (bit === 'X') {
+      sum += 1;
+    }
+    return sum;
+  }, 0);
+
+const replaceX = (addressMask) => {
+  const index = addressMask.indexOf('X');
+  if (index === -1) {
+    return addressMask;
+  }
+  return [
+    replaceX(
+      `${addressMask.substring(0, index)}0${addressMask.substring(index + 1)}`,
+    ),
+    replaceX(
+      `${addressMask.substring(0, index)}1${addressMask.substring(index + 1)}`,
+    ),
+  ];
+};
+
+const getAdresses = (address, mask) => {
+  const addressMask = applyMaskToAdress(address, mask);
+
+  return replaceX(addressMask)
+    .flat(20)
+    .map((address) => parseInt(address, 2));
 };
 
 const write = (value, mask) => {
@@ -44,8 +98,24 @@ const util1 = (input) => {
 };
 
 const util2 = (input) => {
-  console.log(input);
-  return input;
+  const result = input.reduce(({ memory, currentMask }, row) => {
+    const [, mask] = row.match(/mask = ([X01]+)/) || [];
+    const [, address, value] = row.match(/mem\[(\d+)\] = (\d+)/) || [];
+    if (mask !== undefined) {
+      currentMask = mask;
+    }
+    if (address) {
+      const addresses = getAdresses(address, currentMask);
+      addresses.forEach((address) => {
+        memory[address] = value;
+      });
+    }
+    return { memory, currentMask };
+  }, { memory: {}, currentMask: '' });
+  return Object.values(result.memory).reduce((sum, value) => {
+    sum += Number(value);
+    return sum;
+  }, 0);
 };
 
-module.exports = { util1, util2, write };
+module.exports = { util1, util2, write, getAdresses };
