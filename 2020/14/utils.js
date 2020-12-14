@@ -70,52 +70,64 @@ const write = (value, mask) => {
   return parseInt(or, 2);
 };
 
-const parseRow = ({ row, memory, currentMask }) => {
+const readRow = (row) => {
   const [, mask] = row.match(/mask = ([X01]+)/) || [];
-  const [, mem, value] = row.match(/mem\[(\d+)\] = (\d+)/) || [];
+  const [, address, value] = row.match(/mem\[(\d+)\] = (\d+)/) || [];
+  return { address, mask, value };
+};
+
+const writeRow = ({ row, memory, currentMask }) => {
+  const { address, mask, value } = readRow(row);
   if (mask !== undefined) {
     currentMask = mask;
   }
-  if (mem !== undefined) {
-    memory[mem] = write(value, currentMask);
+  if (address !== undefined) {
+    memory[address] = write(value, currentMask);
   }
 
   return { memory, currentMask };
 };
 
+const writeAddresses = ({ row, memory, currentMask }) => {
+  const { address, mask, value } = readRow(row);
+  if (mask !== undefined) {
+    currentMask = mask;
+  }
+  if (address) {
+    const addresses = getAdresses(address, currentMask);
+    addresses.forEach((address) => {
+      memory[address] = value;
+    });
+  }
+  return { memory, currentMask };
+};
+
+const summarizeMemory = ({ memory }) =>
+  Object.values(memory).reduce((sum, value) => {
+    sum += Number(value);
+    return sum;
+  }, 0);
+
 const util1 = (input) => {
   const result = input.reduce(
     (result, row) => {
-      const { memory, currentMask } = parseRow({ row, ...result });
+      const { memory, currentMask } = writeRow({ row, ...result });
       return { memory, currentMask };
     },
     { currentMask: '', memory: {} },
   );
-  return Object.values(result.memory).reduce((sum, value) => {
-    sum += value;
-    return sum;
-  }, 0);
+  return summarizeMemory(result);
 };
 
 const util2 = (input) => {
-  const result = input.reduce(({ memory, currentMask }, row) => {
-    const [, mask] = row.match(/mask = ([X01]+)/) || [];
-    const [, address, value] = row.match(/mem\[(\d+)\] = (\d+)/) || [];
-    if (mask !== undefined) {
-      currentMask = mask;
-    }
-    if (address) {
-      const addresses = getAdresses(address, currentMask);
-      addresses.forEach((address) => {
-        memory[address] = value;
-      });
-    }
-    return { memory, currentMask };
-  }, { memory: {}, currentMask: '' });
-  return Object.values(result.memory).reduce((sum, value) => {
-    sum += Number(value);
-    return sum;
-  }, 0);
+  const result = input.reduce(
+    (result, row) => {
+      const { memory, currentMask } = writeAddresses({ row, ...result });
+      return { memory, currentMask };
+    },
+    { memory: {}, currentMask: '' },
+  );
+  return summarizeMemory(result);
 };
 
 module.exports = { util1, util2, write, getAdresses };
