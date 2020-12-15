@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const { util1, util2 } = require('./utils');
+const { util1 } = require('./utils');
 
 const input = '20,9,11,0,1,2';
 
@@ -13,4 +13,4 @@ const solve2 = () => {
 };
 
 solve1();
-// solve2();
+solve2();

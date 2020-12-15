@@ -1,4 +1,4 @@
-const { util1, util2 } = require('./utils');
+const { util1 } = require('./utils');
 
 describe('it should solve part 1 and part 2', () => {
   const input1 = '0,3,6';
@@ -22,7 +22,7 @@ describe('it should solve part 1 and part 2', () => {
     expect(util1(input1, 2020)).toEqual(436);
   });
 
-  /* test('it should solve example 2', () => {
-    expect(util2(input1, 30000000)).toEqual(175594);
-  }); */
+  test('it should solve example 2', () => {
+    expect(util1(input1, 30000000)).toEqual(175594);
+  });
 });
