@@ -40,7 +40,7 @@ describe('it should solve part 1 and part 2', () => {
     expect(util1(input2)).toEqual(220);
   });
 
-  /* test('it should solve example 2', () => {
-    expect(util2(input1)).toEqual(0);
-  }); */
+  test('it should solve example 2', () => {
+    expect(util2(input1)).toEqual(8);
+  });
 });
