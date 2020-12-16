@@ -1,4 +1,10 @@
-const { util1, util2, isWithinRange, isWithinSomeOfTheRanges } = require('./utils');
+const {
+  util1,
+  util2,
+  isWithinRange,
+  isWithinSomeOfTheRanges,
+  getValidTickets,
+} = require('./utils');
 
 describe('it should solve part 1 and part 2', () => {
   const input1 = [
@@ -14,6 +20,22 @@ describe('it should solve part 1 and part 2', () => {
     '40,4,50',
     '55,2,20',
     '38,6,12',
+  ];
+
+  const input2 = [
+    'class: 0-1 or 4-19',
+    'row: 0-5 or 8-19',
+    'seat: 0-13 or 16-19',
+    '',
+    'your ticket:',
+    '11,12,13',
+    '',
+    'nearby tickets:',
+    '3,9,18',
+    '40,4,50',
+    '55,2,20',
+    '15,1,5',
+    '5,14,9',
   ];
 
   test('it should solve example 1', () => {
@@ -42,11 +64,28 @@ describe('it should solve part 1 and part 2', () => {
         [13, 40, 45, 50],
       ]),
     ).toEqual(false);
-    
+
     expect(util1(input1)).toEqual(71);
   });
 
-  /* test('it should solve example 2', () => {
-    expect(util2(input1)).toEqual(0);
-  }); */
+  test('it should solve example 2', () => {
+    util2(input2);
+    const rules = [
+      [0, 1, 4, 19],
+      [0, 5, 8, 19],
+      [0, 13, 16, 19],
+    ];
+    const tickets = [
+      [3, 9, 18],
+      [40, 4, 50],
+      [55, 2, 20],
+      [15, 1, 5],
+      [5, 14, 9],
+    ];
+    expect(getValidTickets(rules, tickets)).toEqual([
+      [3, 9, 18],
+      [15, 1, 5],
+      [5, 14, 9],
+    ]);
+  });
 });

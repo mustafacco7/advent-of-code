@@ -10,6 +10,18 @@ const parseRules = (input) =>
     })
     .filter(Boolean);
 
+const getRuleNames = (input) =>
+  input
+    .map((row) => {
+      const [, name] =
+        row.match(/(\w+\s?\w+?): (\d+)-(\d+) or (\d+)-(\d+)/) || [];
+      if (name !== undefined) {
+        return name;
+      }
+      return undefined;
+    })
+    .filter(Boolean);
+
 const parseTickets = (input) =>
   input
     .map((row) => {
@@ -52,9 +64,48 @@ const util1 = (input) => {
   return sum;
 };
 
-const util2 = (input) => {
-  console.log(input);
-  return input;
+const getValidTickets = (rules, tickets) =>
+  tickets
+    .map((ticket) => {
+      if (ticket.some((value) => !isWithinSomeOfTheRanges(value, rules))) {
+        return false;
+      }
+      return ticket;
+    })
+    .filter(Boolean);
+
+const findMatchingRules = (rules, tickets, ruleNames) => {
+  const matches = {};
+  tickets.forEach((ticket) => {
+    matches[ticket] = {};
+    rules.forEach((rule, ruleIndex) => {
+      ticket.forEach((value, valueIndex) => {
+        if (isWithinRange(value, rule)) {
+          matches[ticket][ruleNames[valueIndex]] = [
+            ...(matches[ticket][ruleNames[valueIndex]] || []),
+            ruleIndex,
+          ];
+        }
+      });
+    });
+  });
+  return matches;
 };
 
-module.exports = { util1, util2, isWithinRange, isWithinSomeOfTheRanges };
+const util2 = (input) => {
+  const rules = parseRules(input);
+  const [, ...nearbyTickets] = parseTickets(input);
+  const validTickets = getValidTickets(rules, nearbyTickets);
+  const ruleNames = getRuleNames(input);
+  const matchingRules = findMatchingRules(rules, validTickets, ruleNames);
+  Object.values(matchingRules).forEach((matchingRule) => console.log(matchingRule));
+  return validTickets;
+};
+
+module.exports = {
+  util1,
+  util2,
+  isWithinRange,
+  isWithinSomeOfTheRanges,
+  getValidTickets,
+};
