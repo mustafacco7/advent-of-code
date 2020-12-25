@@ -14,10 +14,19 @@ const getNeighbours = ({ x, y }) =>
     return { x: newX, y: newY };
   });
 
-const getNumberOfBlackNeighbours = (hex, { x, y }) => {
+const getKey = ({ x, y }) => `${x},${y}`;
+const getCoordinates = (key) => {
+  const [x, y] = key.split(',').map(Number);
+  return { x, y };
+};
+
+const getNumberOfBlackNeighbours = (blackTiles, { x, y }) => {
   const neighbours = getNeighbours({ x, y });
   return neighbours.reduce((count, { x, y }) => {
-    count += hex[`${x},${y}`] === true ? 1 : 0;
+    const key = getKey({ x, y });
+    if (blackTiles.has(key)) {
+      count += 1;
+    }
     return count;
   }, 0);
 };
@@ -35,57 +44,55 @@ const move = (row) => {
   );
 };
 
-const getNewHex = (hex) =>
-  Object.entries(hex).reduce((newHex, [coordinate]) => {
-    const [x, y] = coordinate.split(',').map(Number);
-    const numberOfBlackNeighbours = getNumberOfBlackNeighbours(hex, { x, y });
-    console.log('black', x, y, numberOfBlackNeighbours);
-    const currentTile = hex[`${x},{y}`];
-    newHex[`${x},${y}`] = currentTile;
-    if (
-      currentTile &&
-      (numberOfBlackNeighbours === 0 || numberOfBlackNeighbours > 2)
-    ) {
-      newHex[`${x},${y}`] = false;
+const getBlackTiles = (rows) =>
+  rows.reduce((blackTiles, row) => {
+    const key = getKey(move(row));
+    if (blackTiles.has(key)) {
+      blackTiles.delete(key);
+    } else {
+      blackTiles.add(key);
     }
-    if (!currentTile && numberOfBlackNeighbours === 2) {
-      newHex[`${x},${y}`] = true;
-    }
-    console.log('new', newHex);
-    return newHex;
-  }, {});
+    return blackTiles;
+  }, new Set());
+
+const applyDay = (blackTiles) =>
+  [...blackTiles].reduce((newTiles, key) => {
+    const coordinate = getCoordinates(key);
+    getNeighbours(coordinate).forEach((neighbour) => {
+      const blackNeighbours = getNumberOfBlackNeighbours(blackTiles, neighbour);
+      const neighbourKey = getKey(neighbour);
+      const isNeighbourBlack = blackTiles.has(neighbourKey);
+      if (
+        (isNeighbourBlack && blackNeighbours === 1) ||
+        blackNeighbours === 2
+      ) {
+        newTiles.add(neighbourKey);
+      }
+    });
+
+    return newTiles;
+  }, new Set());
 
 const util1 = (input) => {
-  const hex = input.reduce((hex, row) => {
-    const { x, y } = move(row);
-    hex[`${x},${y}`] = !hex[`${x},${y}`];
-    return hex;
-  }, {});
-  const black = Object.values(hex).filter((entry) => entry);
-  return black.length;
+  const blackTiles = getBlackTiles(input);
+  return blackTiles.size;
 };
 
-const util2 = (input) => {
-  const hex = input.reduce((hex, row) => {
-    const { x, y } = move(row);
-    hex[`${x},${y}`] = !hex[`${x},${y}`];
-    return hex;
-  }, {});
-  console.log(hex);
-  const newHex = getNewHex(hex);
-  console.log(Object.values(newHex).filter((entry) => entry).length);
-  /* for (let day = 1; day <= 100; day += 1) {
-    console.log(
-      `day ${day}`,
-      Object.values(hex).filter((entry) => entry).length,
-    );
-  } */
-  return input;
+const util2 = (input, count = 100) => {
+  let blackTiles = getBlackTiles(input);
+  Array(count)
+    .fill(1)
+    .forEach(() => {
+      blackTiles = applyDay(blackTiles);
+    });
+  return blackTiles.size;
 };
 
 module.exports = {
   util1,
   util2,
+  applyDay,
+  getBlackTiles,
   move,
   getNeighbours,
   getNumberOfBlackNeighbours,

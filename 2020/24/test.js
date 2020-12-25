@@ -1,6 +1,8 @@
 const {
   util1,
   util2,
+  applyDay,
+  getBlackTiles,
   move,
   getNeighbours,
   getNumberOfBlackNeighbours,
@@ -38,7 +40,7 @@ describe('it should solve part 1 and part 2', () => {
     expect(util1(input1)).toEqual(10);
   });
 
-  /* test('it should solve example 2', () => {
+  test('it should solve example 2', () => {
     expect(getNeighbours({ x: 0, y: 0 })).toEqual([
       { x: 1, y: -1 },
       { x: 2, y: 0 },
@@ -48,16 +50,20 @@ describe('it should solve part 1 and part 2', () => {
       { x: -1, y: -1 },
     ]);
 
-    expect(
-      getNumberOfBlackNeighbours({ '0,0': true, '2,0': true }, { x: 0, y: 0 }),
-    ).toEqual(1);
+    const blackTiles = new Set();
+    blackTiles.add('0,0');
+    blackTiles.add('2,0');
+    expect(getNumberOfBlackNeighbours(blackTiles, { x: 0, y: 0 })).toEqual(1);
 
-    expect(
-      getNumberOfBlackNeighbours(
-        { '0,0': true, '2,0': true, '3,8': true, '1,1': true, '-1,1': false },
-        { x: 0, y: 0 },
-      ),
-    ).toEqual(2);
+    blackTiles.add('3,8');
+    blackTiles.add('1,1');
+    expect(getNumberOfBlackNeighbours(blackTiles, { x: 0, y: 0 })).toEqual(2);
+
+    const input2 = getBlackTiles(input1);
+    expect(applyDay(input2).size).toEqual(15);
+    expect(util2(input1, 1)).toEqual(15);
+    expect(util2(input1, 4)).toEqual(14);
+    expect(util2(input1, 20)).toEqual(132);
     expect(util2(input1)).toEqual(2208);
-  }); */
+  });
 });
