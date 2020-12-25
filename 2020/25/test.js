@@ -1,9 +1,6 @@
 const {
-  util1,
-  util2,
   calculateNewValue,
   findLoopSize,
-  calculatePublicKey,
   calcultateEncryptionKey,
 } = require('./utils');
 
