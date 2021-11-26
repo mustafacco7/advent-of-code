@@ -62,7 +62,7 @@ const testa = () => {
   for (let i = input; i < input + 10; ++i) {
     s += recipes[i];
   }
-  console.log(s);
+  // console.log(s);
 };
 
 const testa2 = () => {
@@ -91,7 +91,7 @@ const testa2 = () => {
       recipes[i + 4] == input[4] &&
       recipes[i + 5] == input[5]
     ) {
-      console.log(i);
+      // console.log(i);
       break;
     }
   }

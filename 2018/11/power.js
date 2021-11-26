@@ -30,7 +30,7 @@ const findMaxSquare = (gridSerial, minSquareSize = 3, maxSquareSize = 3) => {
           if (sum > maxPoint.value) {
             maxPoint.value = sum;
             maxPoint.point = `${x},${y},${squareSize}`;
-            console.log(maxPoint);
+            // console.log(maxPoint);
           }
         }
       }
