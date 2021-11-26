@@ -6,7 +6,6 @@ const printDebug = (elves, scores, debug) => {
   const parenthesis = elves[0].index;
   const squareBrackets = elves[1].index;
   const string = scores.reduce((str, score, index) => {
-
     if (index === parenthesis || index === squareBrackets) {
       if (index === parenthesis) {
         str += '(';
@@ -32,7 +31,6 @@ const printDebug = (elves, scores, debug) => {
     } else {
       str += ' ';
     }
-
 
     return str;
   }, '');

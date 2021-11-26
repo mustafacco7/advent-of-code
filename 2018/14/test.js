@@ -1,7 +1,6 @@
-const { findScore, testa, testa2 } = require('./receipes');
+const { findScore, testa2 } = require('./receipes');
 
 describe('it should solve day 14', () => {
-
   describe('it should solve part 1', () => {
     it('it should get correct answer after 5 steps', () => {
       expect(findScore(37, 5, true)).toEqual('0124515891');
@@ -28,6 +27,5 @@ describe('it should solve day 14', () => {
       it('should solve the test case', () => {
         expect().toEqual(325);
       });
-    });*/
-
+    }); */
 });

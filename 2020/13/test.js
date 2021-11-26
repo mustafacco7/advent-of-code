@@ -1,4 +1,4 @@
-const { util1, util2 } = require('./utils');
+const { util1 } = require('./utils');
 
 describe('it should solve part 1 and part 2', () => {
   const input1 = ['939', '7,13,x,x,59,x,31,19'];
