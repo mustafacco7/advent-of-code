@@ -97,8 +97,9 @@ const util2 = (input) => {
   const [, ...nearbyTickets] = parseTickets(input);
   const validTickets = getValidTickets(rules, nearbyTickets);
   const ruleNames = getRuleNames(input);
+  // eslint-disable-next-line no-unused-vars
   const matchingRules = findMatchingRules(rules, validTickets, ruleNames);
-  Object.values(matchingRules).forEach((matchingRule) => console.log(matchingRule));
+  // Object.values(matchingRules).forEach((matchingRule) => console.log(matchingRule));
   return validTickets;
 };
 

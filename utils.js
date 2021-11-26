@@ -58,10 +58,13 @@ const getData = async () => {
   try {
     return await fs.readFile(fileName, 'ascii');
   } catch (err) {
-    console.log('No local input file found. Calling adventofcode.com');
-    const content = await getRemoteData();
-    await fs.writeFile(fileName, content);
-    return content;
+    if (process.env.JEST_WORKER_ID === undefined) {
+      console.log('No local input file found. Calling adventofcode.com');
+      const content = await getRemoteData();
+      await fs.writeFile(fileName, content);
+      return content;
+    }
+    throw new Error('Trying to download data when running Jest');
   }
 };
 
