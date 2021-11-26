@@ -11,9 +11,9 @@ require('dotenv').config({ path: envPath });
  */
 const guessDate = () => {
   // If no date is specified, try to guess the date from the path of the calling file
-  let [, year, day] = process.cwd().match(/(\d{4})\/(\d{1,2})$/);
+  let [, year, day] = process.cwd().match(/(\d{4})\/(\d{1,2})$/) || [];
 
-  if (day.startsWith('0')) {
+  if (day && day.startsWith('0')) {
     day = day.substr(1);
   }
 
